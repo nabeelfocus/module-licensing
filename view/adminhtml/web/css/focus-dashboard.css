@@ -111,9 +111,37 @@
 }
 .focus-lic__table td { padding: 0.9rem 1.2rem; border-bottom: 1px solid #f0efee; vertical-align: middle; }
 .focus-lic__table tr:last-child td { border-bottom: 0; }
+/* The UA sheet's `display: table-row` outranks the plain [hidden] rule */
+.focus-lic__table tr[hidden] { display: none; }
 .focus-lic__table-wrap { overflow-x: auto; }
 .focus-lic__yes { color: #79a22e; font-weight: 700; }
 .focus-lic__no { color: #e22626; font-weight: 700; }
+
+/* Disabled modules are installed but not running — present, de-emphasised */
+.focus-lic__row--muted td { background: #fbfaf9; color: #8d867e; }
+.focus-lic__row-reason { font-size: 1.15rem; margin-top: 2px; }
+
+/* ── Module filter chips + search ── */
+.focus-lic__filters {
+    display: flex; justify-content: space-between; align-items: center; gap: 1.2rem;
+    flex-wrap: wrap; padding: 1.2rem 1.8rem; border-bottom: 1px solid #e3e3e3;
+}
+.focus-lic__chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.focus-lic__chip {
+    border: 1px solid #d6d2ce; background: #fff; border-radius: 14px;
+    padding: 0.4rem 1.2rem; font-size: 1.25rem; color: #514943; cursor: pointer;
+    white-space: nowrap; font-family: inherit;
+}
+.focus-lic__chip:hover { border-color: #948d84; background: #fcfcfc; }
+.focus-lic__chip:focus-visible { outline: 2px solid #eb5202; outline-offset: 1px; }
+.focus-lic__chip--on { background: #41362f; border-color: #41362f; color: #fff; font-weight: 600; }
+.focus-lic__chip-n { font-variant-numeric: tabular-nums; opacity: 0.75; margin-left: 4px; }
+.focus-lic__search {
+    border: 1px solid #d6d2ce; border-radius: 3px; padding: 0.5rem 1.1rem;
+    font-size: 1.3rem; min-width: 220px; background: #fff; color: #303030;
+}
+.focus-lic__empty { margin: 0; padding: 2.6rem 1.8rem; text-align: center; color: #8d867e; font-size: 1.35rem; }
+.focus-lic__empty[hidden] { display: none; }
 
 /* Busy state while an AJAX action runs */
 .focus-lic--busy { opacity: 0.6; pointer-events: none; }

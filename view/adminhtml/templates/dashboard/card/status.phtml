@@ -1,6 +1,9 @@
 <?php
 /**
- * License Status hero card — answers "is my license healthy?" at a glance.
+ * License status strip — answers "is my license healthy?" on one line.
+ *
+ * Status, plan and expiry read together across a single row; the remaining
+ * facts sit in a compact strip below so the modules card starts above the fold.
  *
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Framework\Escaper $escaper
@@ -20,8 +23,13 @@ $hasState = $state->getState() !== null;
             <div class="focus-lic__hero-title">
                 <span class="focus-lic__hero-state"><?= $escaper->escapeHtml($state->getStatusLabel()) ?></span>
                 <span class="focus-lic__badge focus-lic__badge--<?= $escaper->escapeHtmlAttr($severity) ?>">
-                    <?= $escaper->escapeHtml(strtoupper($state->getStatusLabel())) ?>
+                    <?= $escaper->escapeHtml($state->getStatusBadgeLabel()) ?>
                 </span>
+                <?php if ($state->getPlan() !== null): ?>
+                    <span class="focus-lic__badge focus-lic__badge--neutral">
+                        <?= $escaper->escapeHtml(strtoupper($state->getPlan())) ?>
+                    </span>
+                <?php endif; ?>
             </div>
             <p class="focus-lic__hero-desc"><?= $escaper->escapeHtml($state->getStatusDescription()) ?></p>
         </div>
@@ -33,8 +41,8 @@ $hasState = $state->getState() !== null;
                          style="width: <?= (int) $state->getExpiryPercent() ?>%"></div>
                 </div>
                 <div class="focus-lic__meter-labels">
-                    <span><?= $escaper->escapeHtml(__('Expires %1 (%2 days)', $state->formatDate($state->getExpiresAt()), (string) max(0, (int) $days))) ?></span>
-                    <span><?= $escaper->escapeHtml(__('Offline grace: %1 of %2 days left', (string) $state->getGraceRemainingDays(), (string) $state->getGraceTotalDays())) ?></span>
+                    <span><?= $escaper->escapeHtml(__('Expires %1', $state->formatDate($state->getExpiresAt()))) ?></span>
+                    <span><?= $escaper->escapeHtml(__('%1 days', (string) max(0, (int) $days))) ?></span>
                 </div>
             </div>
         <?php endif; ?>
@@ -43,15 +51,7 @@ $hasState = $state->getState() !== null;
     <?php if ($hasState): ?>
         <dl class="focus-lic__facts">
             <div><dt><?= $escaper->escapeHtml(__('License Key')) ?></dt><dd><code><?= $escaper->escapeHtml($state->getMaskedKey()) ?></code></dd></div>
-            <?php if ($state->getPlan() !== null): ?>
-                <div><dt><?= $escaper->escapeHtml(__('License Type')) ?></dt><dd><?= $escaper->escapeHtml($state->getPlan()) ?></dd></div>
-            <?php endif; ?>
-            <div><dt><?= $escaper->escapeHtml(__('Expiry Date')) ?></dt><dd><?= $escaper->escapeHtml($state->getExpiresAt() !== null ? $state->formatDate($state->getExpiresAt()) : (string) __('Lifetime')) ?></dd></div>
-            <?php if ($days !== null): ?>
-                <div><dt><?= $escaper->escapeHtml(__('Days Remaining')) ?></dt><dd><?= (int) max(0, $days) ?></dd></div>
-            <?php endif; ?>
             <div><dt><?= $escaper->escapeHtml(__('Revision')) ?></dt><dd><?= (int) $state->getRevision() ?></dd></div>
-            <div><dt><?= $escaper->escapeHtml(__('Last Synchronization')) ?></dt><dd><?= $escaper->escapeHtml($state->formatDate($state->getLastSyncedAt(), true)) ?></dd></div>
             <div>
                 <dt><?= $escaper->escapeHtml(__('Current Domain')) ?></dt>
                 <dd>
@@ -60,6 +60,11 @@ $hasState = $state->getState() !== null;
                         <span class="focus-lic__badge focus-lic__badge--neutral"><?= $escaper->escapeHtml($state->getDomainType()) ?></span>
                     <?php endif; ?>
                 </dd>
+            </div>
+            <div><dt><?= $escaper->escapeHtml(__('Last Synchronization')) ?></dt><dd><?= $escaper->escapeHtml($state->formatDate($state->getLastSyncedAt(), true)) ?></dd></div>
+            <div>
+                <dt><?= $escaper->escapeHtml(__('Offline Grace')) ?></dt>
+                <dd><?= $escaper->escapeHtml(__('%1 of %2 days', (string) $state->getGraceRemainingDays(), (string) $state->getGraceTotalDays())) ?></dd>
             </div>
         </dl>
     <?php endif; ?>

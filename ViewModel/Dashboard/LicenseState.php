@@ -146,6 +146,26 @@ class LicenseState implements ArgumentInterface
     }
 
     /**
+     * Short uppercase token for the status pill next to the headline.
+     *
+     * getStatusLabel() is a sentence ("Active — Renewal Due") and reads badly
+     * shouted inside a pill, so the pill gets its own one-word form.
+     */
+    public function getStatusBadgeLabel(): string
+    {
+        return match ($this->getStatus()) {
+            self::STATUS_NOT_CONFIGURED => (string) __('NO KEY'),
+            self::STATUS_NOT_ACTIVATED  => (string) __('NOT ACTIVATED'),
+            self::STATUS_ACTIVE         => (string) __('ACTIVE'),
+            self::STATUS_EXPIRING       => (string) __('RENEWAL DUE'),
+            self::STATUS_EXPIRED        => (string) __('EXPIRED'),
+            self::STATUS_SUSPENDED      => (string) __('SUSPENDED'),
+            self::STATUS_VALIDATION_REQUIRED => (string) __('VALIDATION DUE'),
+            default                     => (string) __('INVALID'),
+        };
+    }
+
+    /**
      * Severity bucket for the status badge: ok | warn | crit | neutral.
      */
     public function getStatusSeverity(): string

@@ -130,6 +130,38 @@ class ModuleStatus implements ArgumentInterface
     }
 
     /**
+     * Rows that are actually a licensing problem: the module is running but
+     * the license does not cover it. This is the dashboard's default view —
+     * when it is empty there is nothing for the admin to do.
+     *
+     * @return array[]
+     */
+    public function getAttentionRows(): array
+    {
+        return array_values(array_filter(
+            $this->getRows(),
+            static fn (array $r): bool => $r['enabled'] && !$r['licensed']
+        ));
+    }
+
+    /**
+     * Counts behind the filter chips, keyed by the chip's filter token.
+     *
+     * @return array{attention: int, active: int, disabled: int, all: int}
+     */
+    public function getFilterCounts(): array
+    {
+        $rows = $this->getRows();
+
+        return [
+            'attention' => count($this->getAttentionRows()),
+            'active'    => count(array_filter($rows, static fn (array $r): bool => $r['status'] === self::STATUS_ACTIVE)),
+            'disabled'  => count(array_filter($rows, static fn (array $r): bool => $r['status'] === self::STATUS_DISABLED)),
+            'all'       => count($rows),
+        ];
+    }
+
+    /**
      * @return int
      */
     public function getInstalledCount(): int
