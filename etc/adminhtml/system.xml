@@ -2,20 +2,20 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <!-- class="focus-tab" puts the Focus logo before the tab label
-             (styled in focus-dashboard.css, same technique as Amasty). -->
-        <tab id="beds" translate="label" sortOrder="200" class="focus-tab">
-            <label>Focus</label>
-        </tab>
-        <!-- Re-declaration of the shared "focus" tab used by the other Focus
-             modules — merged by Magento; adds the same logo class there. -->
+        <!--
+            ONE shared "focus" tab for every Focus module. This is a
+            re-declaration of the same tab id the other Focus modules use, so
+            Magento merges them into a single entry instead of showing two
+            identically-labelled "Focus" tabs. class="focus-tab" adds the Focus
+            logo before the label (styled in focus-dashboard.css).
+        -->
         <tab id="focus" translate="label" sortOrder="400" class="focus-tab">
             <label>Focus</label>
         </tab>
 
         <section id="focus_licensing" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
             <label>Licensing</label>
-            <tab>beds</tab>
+            <tab>focus</tab>
             <resource>Focus_Licensing::config</resource>
 
             <!--

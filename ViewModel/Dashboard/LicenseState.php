@@ -13,6 +13,7 @@ use Focus\Licensing\Model\Config;
 use Focus\Licensing\Model\LicenseCacheManager;
 use Magento\Cron\Model\ResourceModel\Schedule\CollectionFactory as ScheduleCollectionFactory;
 use Magento\Cron\Model\Schedule;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
@@ -41,11 +42,13 @@ class LicenseState implements ArgumentInterface
      * @param LicenseCacheManager $cacheManager
      * @param Config $config
      * @param ScheduleCollectionFactory $scheduleCollectionFactory
+     * @param TimezoneInterface $timezone
      */
     public function __construct(
         private readonly LicenseCacheManager $cacheManager,
         private readonly Config $config,
-        private readonly ScheduleCollectionFactory $scheduleCollectionFactory
+        private readonly ScheduleCollectionFactory $scheduleCollectionFactory,
+        private readonly TimezoneInterface $timezone
     ) {}
 
     /**
@@ -314,18 +317,31 @@ class LicenseState implements ArgumentInterface
     }
 
     /**
-     * Format a UTC datetime for display; returns em-dash when absent.
+     * Format a datetime for display in the STORE's configured timezone.
+     *
+     * Everything the license server stores and signs is UTC (issued_at,
+     * expires_at, cron schedule). Admins read the dashboard in local time, so
+     * the value is converted through Magento's timezone service and labelled
+     * with the real zone abbreviation (e.g. "BST"), never a hard-coded "UTC".
+     *
+     * @param string|null $utcDateTime UTC datetime string, or null
+     * @param bool $withTime Include the time part and timezone label
+     * @return string
      */
     public function formatDate(?string $utcDateTime, bool $withTime = false): string
     {
         if (empty($utcDateTime)) {
             return '—';
         }
-        $ts = strtotime($utcDateTime);
-        if ($ts === false) {
+
+        try {
+            $date = $this->timezone->date(new \DateTime($utcDateTime, new \DateTimeZone('UTC')));
+        } catch (\Exception) {
             return '—';
         }
 
-        return $withTime ? date('j M Y, H:i', $ts) . ' UTC' : date('j M Y', $ts);
+        return $withTime
+            ? $date->format('j M Y, H:i') . ' ' . $date->format('T')
+            : $date->format('j M Y');
     }
 }

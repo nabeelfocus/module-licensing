@@ -23,7 +23,7 @@ $next = $state->getNextValidationAt();
                 <?php if ($next !== null): ?>
                     <?= $escaper->escapeHtml($state->formatDate($next, true)) ?>
                 <?php else: ?>
-                    <?= $escaper->escapeHtml(__('Nightly at 01:30 UTC (cron)')) ?>
+                    <?= $escaper->escapeHtml(__('Nightly (cron)')) ?>
                 <?php endif; ?>
             </dd>
 
