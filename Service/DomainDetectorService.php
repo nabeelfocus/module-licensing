@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Service;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -14,6 +20,9 @@ use Magento\Store\Model\ScopeInterface;
  */
 class DomainDetectorService
 {
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     */
     public function __construct(
         private readonly ScopeConfigInterface $scopeConfig
     ) {}

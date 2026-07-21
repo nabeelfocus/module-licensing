@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Controller\Adminhtml\License;
 
 use Focus\Licensing\Block\Adminhtml\Dashboard\View;
@@ -21,6 +27,12 @@ abstract class AbstractDashboardAction extends Action implements HttpPostActionI
 {
     public const ADMIN_RESOURCE = 'Focus_Licensing::config';
 
+    /**
+     * @param Context $context
+     * @param DashboardActions $dashboardActions
+     * @param JsonFactory $jsonFactory
+     * @param LayoutFactory $layoutFactory
+     */
     public function __construct(
         Context $context,
         protected readonly DashboardActions $dashboardActions,
@@ -30,6 +42,9 @@ abstract class AbstractDashboardAction extends Action implements HttpPostActionI
         parent::__construct($context);
     }
 
+    /**
+     * @return Json
+     */
     public function execute(): Json
     {
         try {

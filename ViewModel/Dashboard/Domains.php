@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\ViewModel\Dashboard;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -13,6 +19,9 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
  */
 class Domains implements ArgumentInterface
 {
+    /**
+     * @param LicenseState $licenseState
+     */
     public function __construct(
         private readonly LicenseState $licenseState
     ) {}
@@ -60,6 +69,9 @@ class Domains implements ArgumentInterface
         return $rows;
     }
 
+    /**
+     * @return LicenseState
+     */
     public function getLicenseState(): LicenseState
     {
         return $this->licenseState;

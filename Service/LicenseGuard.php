@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Service;
 
 use Focus\Licensing\Api\LicenseClientInterface;
@@ -28,6 +34,13 @@ class LicenseGuard implements LicenseGuardInterface
     /** Per-request memory cache: module_name → bool */
     private array $memoryCache = [];
 
+    /**
+     * @param LicenseCacheManager $cacheManager
+     * @param LicenseClientInterface $licenseClient
+     * @param ModuleDiscoveryInterface $moduleDiscovery
+     * @param Config $config
+     * @param Logger $logger
+     */
     public function __construct(
         private readonly LicenseCacheManager $cacheManager,
         private readonly LicenseClientInterface $licenseClient,
@@ -36,6 +49,10 @@ class LicenseGuard implements LicenseGuardInterface
         private readonly Logger $logger
     ) {}
 
+    /**
+     * @param string $moduleName
+     * @return bool
+     */
     public function isLicensed(string $moduleName): bool
     {
         if (array_key_exists($moduleName, $this->memoryCache)) {
@@ -48,6 +65,10 @@ class LicenseGuard implements LicenseGuardInterface
         return $result;
     }
 
+    /**
+     * @param ?string $licenseKey
+     * @return bool
+     */
     public function forceRevalidate(?string $licenseKey = null): bool
     {
         $licenseKey = $licenseKey ?: $this->config->getGlobalLicenseKey();
@@ -102,6 +123,10 @@ class LicenseGuard implements LicenseGuardInterface
         return $isValid;
     }
 
+    /**
+     * @param string $moduleName
+     * @return bool
+     */
     private function evaluateFromCache(string $moduleName): bool
     {
         $licenseKey = $this->config->getGlobalLicenseKey();

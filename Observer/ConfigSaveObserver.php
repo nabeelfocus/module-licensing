@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Observer;
 
 use Focus\Licensing\Api\LicenseGuardInterface;
@@ -13,11 +19,19 @@ use Magento\Framework\Message\ManagerInterface;
  */
 class ConfigSaveObserver implements ObserverInterface
 {
+    /**
+     * @param LicenseGuardInterface $guard
+     * @param ManagerInterface $messageManager
+     */
     public function __construct(
         private readonly LicenseGuardInterface $guard,
         private readonly ManagerInterface $messageManager
     ) {}
 
+    /**
+     * @param Observer $observer
+     * @return void
+     */
     public function execute(Observer $observer): void
     {
         try {

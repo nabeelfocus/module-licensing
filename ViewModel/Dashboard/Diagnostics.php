@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\ViewModel\Dashboard;
 
 use Focus\Licensing\Model\Config;
@@ -13,6 +19,10 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
  */
 class Diagnostics implements ArgumentInterface
 {
+    /**
+     * @param LicenseState $licenseState
+     * @param Config $config
+     */
     public function __construct(
         private readonly LicenseState $licenseState,
         private readonly Config $config
@@ -50,6 +60,9 @@ class Diagnostics implements ArgumentInterface
         ];
     }
 
+    /**
+     * @return string
+     */
     private function getCacheAgeLabel(): string
     {
         if ($this->licenseState->getState() === null) {

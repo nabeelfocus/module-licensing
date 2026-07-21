@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Model\System\Message;
 
 use Focus\Licensing\ViewModel\Dashboard\LicenseState;
@@ -15,6 +21,9 @@ class ValidationStale extends AbstractLicenseMessage
 
     private const STALE_AFTER_SECONDS = 3 * 86400;
 
+    /**
+     * @return bool
+     */
     public function isDisplayed(): bool
     {
         if (!in_array($this->licenseState->getStatus(), [
@@ -28,6 +37,9 @@ class ValidationStale extends AbstractLicenseMessage
             && $this->licenseState->getGraceRemainingDays() > 5;
     }
 
+    /**
+     * @return string
+     */
     public function getText(): string
     {
         return (string) __(

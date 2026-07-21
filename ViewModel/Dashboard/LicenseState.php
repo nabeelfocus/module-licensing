@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\ViewModel\Dashboard;
 
 use Focus\Licensing\Model\Config;
@@ -31,6 +37,11 @@ class LicenseState implements ArgumentInterface
     private ?array $state = null;
     private bool $stateLoaded = false;
 
+    /**
+     * @param LicenseCacheManager $cacheManager
+     * @param Config $config
+     * @param ScheduleCollectionFactory $scheduleCollectionFactory
+     */
     public function __construct(
         private readonly LicenseCacheManager $cacheManager,
         private readonly Config $config,
@@ -50,6 +61,9 @@ class LicenseState implements ArgumentInterface
         return $this->state;
     }
 
+    /**
+     * @return bool
+     */
     public function isKeyConfigured(): bool
     {
         return $this->config->getGlobalLicenseKey() !== '';
@@ -111,6 +125,9 @@ class LicenseState implements ArgumentInterface
         return self::STATUS_ACTIVE;
     }
 
+    /**
+     * @return string
+     */
     public function getStatusLabel(): string
     {
         return match ($this->getStatus()) {
@@ -158,6 +175,9 @@ class LicenseState implements ArgumentInterface
         };
     }
 
+    /**
+     * @return ?string
+     */
     public function getPlan(): ?string
     {
         $plan = $this->getState()['plan'] ?? null;
@@ -165,11 +185,17 @@ class LicenseState implements ArgumentInterface
         return is_string($plan) && $plan !== '' ? $plan : null;
     }
 
+    /**
+     * @return int
+     */
     public function getRevision(): int
     {
         return (int) ($this->getState()['license_revision'] ?? 0);
     }
 
+    /**
+     * @return ?string
+     */
     public function getExpiresAt(): ?string
     {
         $v = $this->getState()['expires_at'] ?? null;
@@ -204,16 +230,25 @@ class LicenseState implements ArgumentInterface
         return (int) max(2, min(100, round($days / 365 * 100)));
     }
 
+    /**
+     * @return string
+     */
     public function getDomain(): string
     {
         return (string) ($this->getState()['domain'] ?? '');
     }
 
+    /**
+     * @return string
+     */
     public function getDomainType(): string
     {
         return (string) ($this->getState()['domain_type'] ?? '');
     }
 
+    /**
+     * @return ?string
+     */
     public function getLastSyncedAt(): ?string
     {
         $v = $this->getState()['issued_at'] ?? null;
@@ -221,6 +256,9 @@ class LicenseState implements ArgumentInterface
         return is_string($v) && $v !== '' ? $v : null;
     }
 
+    /**
+     * @return int
+     */
     public function getCacheAgeSeconds(): int
     {
         $issuedAt = $this->getLastSyncedAt();
@@ -231,6 +269,9 @@ class LicenseState implements ArgumentInterface
         return max(0, time() - (int) strtotime($issuedAt));
     }
 
+    /**
+     * @return int
+     */
     public function getGraceTotalDays(): int
     {
         return (int) round(Config::OFFLINE_GRACE_SECONDS / 86400);

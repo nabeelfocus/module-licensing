@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Controller\Adminhtml\License;
 
 use Focus\Licensing\Service\ConnectionTester;
@@ -18,6 +24,11 @@ class TestConnection extends Action implements HttpPostActionInterface
 {
     public const ADMIN_RESOURCE = 'Focus_Licensing::config';
 
+    /**
+     * @param Context $context
+     * @param ConnectionTester $connectionTester
+     * @param JsonFactory $jsonFactory
+     */
     public function __construct(
         Context $context,
         private readonly ConnectionTester $connectionTester,
@@ -26,6 +37,9 @@ class TestConnection extends Action implements HttpPostActionInterface
         parent::__construct($context);
     }
 
+    /**
+     * @return Json
+     */
     public function execute(): Json
     {
         try {

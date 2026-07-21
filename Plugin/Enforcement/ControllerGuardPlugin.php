@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Plugin\Enforcement;
 
 use Focus\Licensing\Api\ProtectedModuleRegistryInterface;
@@ -27,6 +33,15 @@ use Magento\Framework\UrlInterface;
  */
 class ControllerGuardPlugin
 {
+    /**
+     * @param EnforcementGuard $enforcementGuard
+     * @param ProtectedModuleRegistryInterface $registry
+     * @param State $appState
+     * @param ResultFactory $resultFactory
+     * @param UrlInterface $url
+     * @param ManagerInterface $messageManager
+     * @param Logger $logger
+     */
     public function __construct(
         private readonly EnforcementGuard $enforcementGuard,
         private readonly ProtectedModuleRegistryInterface $registry,
@@ -60,6 +75,9 @@ class ControllerGuardPlugin
         }
     }
 
+    /**
+     * @param string $moduleName
+     */
     private function buildBlockedResult(string $moduleName)
     {
         $label = $this->registry->getLabel($moduleName);
@@ -89,6 +107,9 @@ class ControllerGuardPlugin
         return $redirect;
     }
 
+    /**
+     * @return bool
+     */
     private function isAdmin(): bool
     {
         try {

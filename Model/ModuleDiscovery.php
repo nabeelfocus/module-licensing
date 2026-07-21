@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Model;
 
 use Focus\Licensing\Api\ModuleDiscoveryInterface;
@@ -13,10 +19,16 @@ class ModuleDiscovery implements ModuleDiscoveryInterface
         'Focus_LicenseServer'
     ];
 
+    /**
+     * @param ModuleListInterface $moduleList
+     */
     public function __construct(
         private readonly ModuleListInterface $moduleList
     ) {}
 
+    /**
+     * @return array
+     */
     public function getInstalledFocusModules(): array
     {
         $focusModules = [];

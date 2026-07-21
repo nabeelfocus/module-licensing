@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Service;
 
 use Focus\Licensing\Api\LicenseClientInterface;
@@ -16,6 +22,12 @@ use Focus\Licensing\Model\Config;
  */
 class ConnectionTester
 {
+    /**
+     * @param LicenseClientInterface $licenseClient
+     * @param SignatureVerifier $signatureVerifier
+     * @param ModuleDiscoveryInterface $moduleDiscovery
+     * @param Config $config
+     */
     public function __construct(
         private readonly LicenseClientInterface $licenseClient,
         private readonly SignatureVerifier $signatureVerifier,

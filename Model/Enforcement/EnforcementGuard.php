@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Model\Enforcement;
 
 use Focus\Licensing\Api\LicenseGuardInterface;
@@ -29,6 +35,12 @@ class EnforcementGuard
     /** @var array<string, string|null> memoized className → blocked module|null */
     private array $memo = [];
 
+    /**
+     * @param ModuleNameResolver $resolver
+     * @param ProtectedModuleRegistryInterface $registry
+     * @param LicenseGuardInterface $licenseGuard
+     * @param Logger $logger
+     */
     public function __construct(
         private readonly ModuleNameResolver $resolver,
         private readonly ProtectedModuleRegistryInterface $registry,
@@ -67,6 +79,10 @@ class EnforcementGuard
         }
     }
 
+    /**
+     * @param string $className
+     * @return ?string
+     */
     private function evaluate(string $className): ?string
     {
         try {

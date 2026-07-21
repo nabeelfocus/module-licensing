@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Block\Adminhtml\Dashboard;
 
 use Focus\Licensing\ViewModel\Dashboard\DeveloperInfo;
@@ -23,6 +29,15 @@ class View extends Template
 {
     protected $_template = 'Focus_Licensing::dashboard/main.phtml';
 
+    /**
+     * @param Context $context
+     * @param LicenseState $licenseState
+     * @param ModuleStatus $moduleStatus
+     * @param Diagnostics $diagnostics
+     * @param Domains $domains
+     * @param DeveloperInfo $developerInfo
+     * @param array $data
+     */
     public function __construct(
         Context $context,
         private readonly LicenseState $licenseState,
@@ -35,6 +50,9 @@ class View extends Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return LicenseState
+     */
     public function getLicenseState(): LicenseState
     {
         return $this->licenseState;

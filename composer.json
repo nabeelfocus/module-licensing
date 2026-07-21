@@ -1,6 +1,6 @@
 {
     "name": "focus/module-licensing",
-    "description": "Focus license client: validates module licenses against Focus_LicenseServer",
+    "description": "Focus licensing client: signed license validation, offline grace and the central enforcement layer that guards commercial Focus modules",
     "type": "magento2-module",
     "license": "proprietary",
     "require": {
@@ -9,12 +9,11 @@
         "magento/module-backend": "*",
         "magento/module-config": "*",
         "magento/module-store": "*",
-        "magento/module-cron": "*"
+        "magento/module-cron": "*",
+        "magento/module-ui": "*"
     },
     "autoload": {
-        "files": [
-            "registration.php"
-        ],
+        "files": ["registration.php"],
         "psr-4": {
             "Focus\\Licensing\\": ""
         }

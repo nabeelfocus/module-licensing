@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Model\System\Message;
 
 use Focus\Licensing\ViewModel\Dashboard\LicenseState;
@@ -15,6 +21,9 @@ class OfflineGraceEnding extends AbstractLicenseMessage
 
     private const WARN_AT_DAYS_LEFT = 5;
 
+    /**
+     * @return bool
+     */
     public function isDisplayed(): bool
     {
         if (!in_array($this->licenseState->getStatus(), [
@@ -29,6 +38,9 @@ class OfflineGraceEnding extends AbstractLicenseMessage
             && $this->licenseState->getGraceRemainingDays() <= self::WARN_AT_DAYS_LEFT;
     }
 
+    /**
+     * @return string
+     */
     public function getText(): string
     {
         return (string) __(
@@ -38,6 +50,9 @@ class OfflineGraceEnding extends AbstractLicenseMessage
         );
     }
 
+    /**
+     * @return int
+     */
     public function getSeverity(): int
     {
         return self::SEVERITY_CRITICAL;

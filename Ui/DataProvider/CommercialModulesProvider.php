@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Ui\DataProvider;
 
 use Focus\Licensing\ViewModel\Dashboard\ModuleStatus;
@@ -15,6 +21,14 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
  */
 class CommercialModulesProvider extends AbstractDataProvider
 {
+    /**
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
+     * @param ModuleStatus $moduleStatus
+     * @param array $meta
+     * @param array $data
+     */
     public function __construct(
         string $name,
         string $primaryFieldName,
@@ -26,6 +40,9 @@ class CommercialModulesProvider extends AbstractDataProvider
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
+    /**
+     * @return array
+     */
     public function getData(): array
     {
         $state = $this->moduleStatus->getLicenseState();
@@ -52,21 +69,35 @@ class CommercialModulesProvider extends AbstractDataProvider
         ];
     }
 
+    /**
+     * @return int
+     */
     public function count(): int
     {
         return count($this->moduleStatus->getRows());
     }
 
+    /**
+     * @param Filter $filter
+     */
     public function addFilter(Filter $filter)
     {
         // no-op: in-memory data set, no server-side filtering
     }
 
+    /**
+     * @param mixed $field
+     * @param mixed $direction
+     */
     public function addOrder($field, $direction)
     {
         // no-op: rows are pre-sorted by module name
     }
 
+    /**
+     * @param mixed $offset
+     * @param mixed $size
+     */
     public function setLimit($offset, $size)
     {
         // no-op: the full set is always small enough to return

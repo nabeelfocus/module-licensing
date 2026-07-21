@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Controller\Adminhtml\Modules;
 
 use Magento\Backend\App\Action;
@@ -15,6 +21,9 @@ class Index extends Action implements HttpGetActionInterface
 {
     public const ADMIN_RESOURCE = 'Focus_Licensing::modules';
 
+    /**
+     * @return void
+     */
     public function execute()
     {
         /** @var \Magento\Backend\Model\View\Result\Page $page */

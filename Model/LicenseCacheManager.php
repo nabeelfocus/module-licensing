@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Model;
 
 use Focus\Licensing\Service\SignatureVerifier;
@@ -35,6 +41,12 @@ class LicenseCacheManager
 {
     private const FLAG_PREFIX = 'focus_licensing_state_';
 
+    /**
+     * @param FlagManager $flagManager
+     * @param EncryptorInterface $encryptor
+     * @param SignatureVerifier $signatureVerifier
+     * @param Logger $logger
+     */
     public function __construct(
         private readonly FlagManager $flagManager,
         private readonly EncryptorInterface $encryptor,
@@ -140,6 +152,9 @@ class LicenseCacheManager
         }
     }
 
+    /**
+     * @return string
+     */
     private function flagCode(): string
     {
         return self::FLAG_PREFIX . 'global';

@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Model\System\Message;
 
 use Focus\Licensing\ViewModel\Dashboard\LicenseState;
@@ -12,11 +18,17 @@ class LicenseExpiring extends AbstractLicenseMessage
 {
     public const IDENTITY = 'focus_licensing_expiring';
 
+    /**
+     * @return bool
+     */
     public function isDisplayed(): bool
     {
         return $this->licenseState->getStatus() === LicenseState::STATUS_EXPIRING;
     }
 
+    /**
+     * @return string
+     */
     public function getText(): string
     {
         return (string) __(

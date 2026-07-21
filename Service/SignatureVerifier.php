@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Service;
 
 use Focus\Licensing\Model\ServerKeyring;
@@ -34,6 +40,10 @@ class SignatureVerifier
         'issued_at',
     ];
 
+    /**
+     * @param ServerKeyring $keyring
+     * @param Logger $logger
+     */
     public function __construct(
         private readonly ServerKeyring $keyring,
         private readonly Logger $logger

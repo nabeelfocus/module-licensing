@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Model\Enforcement;
 
 /**
@@ -38,6 +44,10 @@ class ModuleNameResolver
         return $this->cache[$className];
     }
 
+    /**
+     * @param string $className
+     * @return ?string
+     */
     private function doResolve(string $className): ?string
     {
         $fqcn = ltrim($className, '\\');

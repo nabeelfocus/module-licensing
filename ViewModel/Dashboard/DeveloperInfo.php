@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\ViewModel\Dashboard;
 
 use Magento\Framework\App\State as AppState;
@@ -17,11 +23,18 @@ class DeveloperInfo implements ArgumentInterface
 {
     private const REDACTED_KEYS = ['secret'];
 
+    /**
+     * @param LicenseState $licenseState
+     * @param AppState $appState
+     */
     public function __construct(
         private readonly LicenseState $licenseState,
         private readonly AppState $appState
     ) {}
 
+    /**
+     * @return bool
+     */
     public function isVisible(): bool
     {
         try {

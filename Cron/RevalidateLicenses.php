@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Cron;
 
 use Focus\Licensing\Api\LicenseGuardInterface;
@@ -15,11 +21,18 @@ use Focus\Licensing\Logger\Logger;
  */
 class RevalidateLicenses
 {
+    /**
+     * @param LicenseGuardInterface $licenseGuard
+     * @param Logger $logger
+     */
     public function __construct(
         private readonly LicenseGuardInterface $licenseGuard,
         private readonly Logger $logger
     ) {}
 
+    /**
+     * @return void
+     */
     public function execute(): void
     {
         $this->logger->info('Focus_Licensing: RevalidateLicenses cron started.');

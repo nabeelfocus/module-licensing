@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\ViewModel\Dashboard;
 
 use Focus\Licensing\Api\LicenseGuardInterface;
@@ -35,6 +41,14 @@ class ModuleStatus implements ArgumentInterface
 
     private ?array $rows = null;
 
+    /**
+     * @param FullModuleList $fullModuleList
+     * @param ModuleManager $moduleManager
+     * @param ModuleListInterface $moduleList
+     * @param PackageInfo $packageInfo
+     * @param LicenseGuardInterface $licenseGuard
+     * @param LicenseState $licenseState
+     */
     public function __construct(
         private readonly FullModuleList $fullModuleList,
         private readonly ModuleManager $moduleManager,
@@ -115,21 +129,34 @@ class ModuleStatus implements ArgumentInterface
         ));
     }
 
+    /**
+     * @return int
+     */
     public function getInstalledCount(): int
     {
         return count($this->getRows());
     }
 
+    /**
+     * @return int
+     */
     public function getLicensedCount(): int
     {
         return count(array_filter($this->getRows(), static fn (array $r): bool => $r['licensed']));
     }
 
+    /**
+     * @return LicenseState
+     */
     public function getLicenseState(): LicenseState
     {
         return $this->licenseState;
     }
 
+    /**
+     * @param string $status
+     * @return string
+     */
     private function statusLabel(string $status): string
     {
         return match ($status) {
@@ -164,6 +191,10 @@ class ModuleStatus implements ArgumentInterface
         };
     }
 
+    /**
+     * @param string $moduleName
+     * @return string
+     */
     private function resolveVersion(string $moduleName): string
     {
         try {

@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Plugin\Enforcement;
 
 use Focus\Licensing\Api\ProtectedModuleRegistryInterface;
@@ -19,6 +25,10 @@ use Magento\Webapi\Controller\Rest\Router\Route;
  */
 class WebapiRouterGuardPlugin
 {
+    /**
+     * @param EnforcementGuard $enforcementGuard
+     * @param ProtectedModuleRegistryInterface $registry
+     */
     public function __construct(
         private readonly EnforcementGuard $enforcementGuard,
         private readonly ProtectedModuleRegistryInterface $registry

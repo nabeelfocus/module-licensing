@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Plugin\Enforcement;
 
 use Focus\Licensing\Logger\Logger;
@@ -20,6 +26,10 @@ use Magento\Backend\Model\Menu\Item;
  */
 class AdminMenuGuardPlugin
 {
+    /**
+     * @param EnforcementGuard $enforcementGuard
+     * @param Logger $logger
+     */
     public function __construct(
         private readonly EnforcementGuard $enforcementGuard,
         private readonly Logger $logger

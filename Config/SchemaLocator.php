@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Config;
 
 use Magento\Framework\Config\Dom\UrnResolver;
@@ -14,6 +20,9 @@ class SchemaLocator implements SchemaLocatorInterface
 {
     private string $schema;
 
+    /**
+     * @param UrnResolver $urnResolver
+     */
     public function __construct(UrnResolver $urnResolver)
     {
         $this->schema = $urnResolver->getRealPath(
@@ -21,11 +30,17 @@ class SchemaLocator implements SchemaLocatorInterface
         );
     }
 
+    /**
+     * @return ?string
+     */
     public function getSchema(): ?string
     {
         return $this->schema;
     }
 
+    /**
+     * @return ?string
+     */
     public function getPerFileSchema(): ?string
     {
         return $this->schema;

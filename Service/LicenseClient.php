@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Copyright © Focus. All rights reserved.
+ * @author Focus Team
+ * @package Focus_Licensing
+ */
+
 namespace Focus\Licensing\Service;
 
 use Focus\Licensing\Api\LicenseClientInterface;
@@ -31,6 +37,14 @@ class LicenseClient implements LicenseClientInterface
     private const CONNECT_TIMEOUT = 2;
     private const TOTAL_TIMEOUT   = 5;
 
+    /**
+     * @param Config $config
+     * @param CurlFactory $curlFactory
+     * @param DomainDetectorService $domainDetector
+     * @param LicenseCacheManager $cacheManager
+     * @param ProductMetadataInterface $productMetadata
+     * @param Logger $logger
+     */
     public function __construct(
         private readonly Config $config,
         private readonly CurlFactory $curlFactory,
@@ -40,6 +54,11 @@ class LicenseClient implements LicenseClientInterface
         private readonly Logger $logger
     ) {}
 
+    /**
+     * @param string $licenseKey
+     * @param array $installedModules
+     * @return ?array
+     */
     public function activate(string $licenseKey, array $installedModules): ?array
     {
         return $this->post('/V1/focus-license/activate', [
@@ -51,6 +70,11 @@ class LicenseClient implements LicenseClientInterface
         ]);
     }
 
+    /**
+     * @param string $licenseKey
+     * @param array $installedModules
+     * @return ?array
+     */
     public function validate(string $licenseKey, array $installedModules): ?array
     {
         // Report the revision we hold so the server can log which stores are
@@ -66,6 +90,11 @@ class LicenseClient implements LicenseClientInterface
         ], 'validate');
     }
 
+    /**
+     * @param string $licenseKey
+     * @param array $installedModules
+     * @return ?array
+     */
     public function deactivate(string $licenseKey, array $installedModules): ?array
     {
         return $this->post('/V1/focus-license/deactivate', [
@@ -240,6 +269,9 @@ class LicenseClient implements LicenseClientInterface
         ];
     }
 
+    /**
+     * @return string
+     */
     private function getMagentoVersion(): string
     {
         try {
