@@ -1,0 +1,69 @@
+<?php
+/**
+ * Commercial Modules card — Installed / Enabled / Licensed are separate
+ * facts; Status is the combined verdict.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+/** @var \Focus\Licensing\ViewModel\Dashboard\ModuleStatus $modules */
+$modules = $block->getData('module_status');
+$rows = $modules->getEnabledRows();
+?>
+<div class="focus-lic__card focus-lic__card--wide">
+    <div class="focus-lic__card-head">
+        <h3><?= $escaper->escapeHtml(__('Commercial Modules')) ?></h3>
+        <span class="focus-lic__muted">
+            <?= $escaper->escapeHtml(__('%1 installed · %2 licensed', (string) $modules->getInstalledCount(), (string) $modules->getLicensedCount())) ?>
+            &nbsp;·&nbsp;
+            <a href="<?= $escaper->escapeUrl($block->getUrl('focus_licensing/modules/index')) ?>">
+                <?= $escaper->escapeHtml(__('View all modules')) ?>
+            </a>
+        </span>
+    </div>
+    <div class="focus-lic__table-wrap">
+        <?php if (empty($rows)): ?>
+            <p class="focus-lic__card-body focus-lic__muted"><?= $escaper->escapeHtml(__('No commercial Focus modules are enabled on this store.')) ?></p>
+        <?php else: ?>
+            <table class="focus-lic__table">
+                <thead>
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Module')) ?></th>
+                        <th><?= $escaper->escapeHtml(__('Version')) ?></th>
+                        <th><?= $escaper->escapeHtml(__('Installed')) ?></th>
+                        <th><?= $escaper->escapeHtml(__('Enabled')) ?></th>
+                        <th><?= $escaper->escapeHtml(__('Licensed')) ?></th>
+                        <th><?= $escaper->escapeHtml(__('Status')) ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($rows as $row): ?>
+                        <tr>
+                            <td>
+                                <?= $escaper->escapeHtml($row['module']) ?>
+                                <?php if ($row['reason'] !== ''): ?>
+                                    <div class="focus-lic__muted" style="font-size: 1.15rem;"><?= $escaper->escapeHtml($row['reason']) ?></div>
+                                <?php endif; ?>
+                            </td>
+                            <td><?= $escaper->escapeHtml($row['version']) ?></td>
+                            <td><span class="focus-lic__yes">✓</span></td>
+                            <td>
+                                <?php if ($row['enabled']): ?><span class="focus-lic__yes">✓</span>
+                                <?php else: ?><span class="focus-lic__no">✕</span><?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if ($row['licensed']): ?><span class="focus-lic__yes">✓</span>
+                                <?php else: ?><span class="focus-lic__no">✕</span><?php endif; ?>
+                            </td>
+                            <td>
+                                <span class="focus-lic__badge focus-lic__badge--<?= $escaper->escapeHtmlAttr($row['severity']) ?>">
+                                    <?= $escaper->escapeHtml(strtoupper($row['status_label'])) ?>
+                                </span>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    </div>
+</div>

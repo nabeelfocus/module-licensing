@@ -1,0 +1,27 @@
+<?php
+declare(strict_types=1);
+
+namespace Focus\Licensing\Controller\Adminhtml\Modules;
+
+use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\ResultFactory;
+
+/**
+ * Focus > Commercial Modules — customer overview of every commercial
+ * Focus extension and its license verdict.
+ */
+class Index extends Action implements HttpGetActionInterface
+{
+    public const ADMIN_RESOURCE = 'Focus_Licensing::modules';
+
+    public function execute()
+    {
+        /** @var \Magento\Backend\Model\View\Result\Page $page */
+        $page = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $page->setActiveMenu('Focus_Licensing::modules');
+        $page->getConfig()->getTitle()->prepend(__('Commercial Modules'));
+
+        return $page;
+    }
+}

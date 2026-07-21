@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <!-- class="focus-tab" puts the Focus logo before the tab label
+             (styled in focus-dashboard.css, same technique as Amasty). -->
+        <tab id="beds" translate="label" sortOrder="200" class="focus-tab">
+            <label>Focus</label>
+        </tab>
+        <!-- Re-declaration of the shared "focus" tab used by the other Focus
+             modules — merged by Magento; adds the same logo class there. -->
+        <tab id="focus" translate="label" sortOrder="400" class="focus-tab">
+            <label>Focus</label>
+        </tab>
+
+        <section id="focus_licensing" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>Licensing</label>
+            <tab>beds</tab>
+            <resource>Focus_Licensing::config</resource>
+
+            <!--
+                Field-less group rendered entirely by its frontend_model:
+                the licensing dashboard (status, modules, domains, actions).
+            -->
+            <group id="dashboard" translate="label" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>License Dashboard</label>
+                <frontend_model>Focus\Licensing\Block\Adminhtml\System\Config\Dashboard</frontend_model>
+            </group>
+
+            <!-- General settings -->
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General</label>
+
+                <field id="server_url" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>License Server URL</label>
+                    <comment>Base URL of the Focus_LicenseServer instance, e.g. https://license.beds.co.uk</comment>
+                    <validate>required-entry validate-url</validate>
+                </field>
+
+                <field id="cache_ttl" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Cache TTL (seconds)</label>
+                    <comment>How long to trust a cached license state before the cron refreshes it. Default: 90000 (25 hours).</comment>
+                    <validate>validate-number validate-greater-than-zero</validate>
+                </field>
+                <field id="license_key" translate="label comment" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>License Key</label>
+                    <comment>Your global Focus license key. After changing it, click Save Config — the license validates automatically and the dashboard above updates.</comment>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

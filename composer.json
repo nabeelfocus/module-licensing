@@ -1,0 +1,22 @@
+{
+    "name": "focus/module-licensing",
+    "description": "Focus license client: validates module licenses against Focus_LicenseServer",
+    "type": "magento2-module",
+    "license": "proprietary",
+    "require": {
+        "php": "~8.1.0||~8.2.0||~8.3.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-config": "*",
+        "magento/module-store": "*",
+        "magento/module-cron": "*"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Focus\\Licensing\\": ""
+        }
+    }
+}

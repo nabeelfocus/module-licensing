@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <!-- sortOrder 68: the slot right next to Amasty (69). Slot 70 is core
+             Stores, so a directly-below-Amasty slot does not exist; 68 renders
+             Focus immediately above Amasty. -->
+        <add id="Focus_Licensing::focus"
+             title="Focus"
+             module="Focus_Licensing"
+             sortOrder="68"
+             resource="Focus_Licensing::focus"/>
+        <add id="Focus_Licensing::modules"
+             title="Commercial Modules"
+             module="Focus_Licensing"
+             sortOrder="10"
+             parent="Focus_Licensing::focus"
+             action="focus_licensing/modules/index"
+             resource="Focus_Licensing::modules"/>
+        <add id="Focus_Licensing::license_config"
+             title="License Settings"
+             module="Focus_Licensing"
+             sortOrder="20"
+             parent="Focus_Licensing::focus"
+             action="admin/system_config/edit/section/focus_licensing"
+             resource="Focus_Licensing::config"/>
+    </menu>
+</config>

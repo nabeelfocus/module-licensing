@@ -1,0 +1,26 @@
+<?php
+/**
+ * Developer diagnostics — rendered only in Magento developer mode.
+ * Secrets and HMAC material are redacted in the view model.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+/** @var \Focus\Licensing\ViewModel\Dashboard\DeveloperInfo $dev */
+$dev = $block->getData('developer_info');
+?>
+<?php if ($dev->isVisible()): ?>
+<details class="focus-lic__dev">
+    <summary><?= $escaper->escapeHtml(__('Developer diagnostics (visible in developer mode only)')) ?></summary>
+    <div class="focus-lic__dev-body">
+        <dl class="focus-lic__kv focus-lic__kv--tight">
+            <?php foreach ($dev->getFacts() as $label => $value): ?>
+                <dt><?= $escaper->escapeHtml($label) ?></dt>
+                <dd><code><?= $escaper->escapeHtml($value) ?></code></dd>
+            <?php endforeach; ?>
+        </dl>
+        <p class="focus-lic__muted"><?= $escaper->escapeHtml(__('Raw signed payload (secret redacted):')) ?></p>
+        <pre class="focus-lic__dev-payload"><?= $escaper->escapeHtml($dev->getRedactedPayloadJson()) ?></pre>
+    </div>
+</details>
+<?php endif; ?>

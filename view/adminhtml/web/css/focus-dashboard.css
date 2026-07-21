@@ -1,0 +1,166 @@
+/**
+ * Focus Licensing dashboard — scoped under .focus-lic to stay clear of
+ * Magento admin styles. Palette follows the Magento admin scheme
+ * (orange #eb5202 primary, success #79a22e, error #e22626).
+ */
+.focus-lic { margin: 0 0 30px; display: flex; flex-direction: column; gap: 16px; }
+.focus-lic * { box-sizing: border-box; }
+
+/* ── Toolbar ── */
+.focus-lic__toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.focus-lic__toolbar-title { display: flex; align-items: center; gap: 10px; font-size: 2rem; color: #41362f; }
+.focus-lic__logo {
+    width: 34px; height: 34px; border-radius: 6px; background: #eb5202; color: #fff;
+    display: inline-grid; place-items: center; font-weight: 700; font-size: 1.8rem;
+}
+.focus-lic__toolbar-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.focus-lic__btn {
+    border: 1px solid #ada79e; background: #f8f8f8; color: #514943;
+    padding: 0.8rem 1.6rem; font-size: 1.4rem; border-radius: 3px; cursor: pointer;
+}
+.focus-lic__btn:hover { background: #fcfcfc; border-color: #948d84; }
+.focus-lic__btn--primary { background: #eb5202; border-color: #eb5202; color: #fff; font-weight: 600; }
+.focus-lic__btn--primary:hover { background: #d94b02; border-color: #d94b02; }
+.focus-lic__btn--danger { color: #e22626; }
+.focus-lic__btn:focus-visible { outline: 2px solid #eb5202; outline-offset: 1px; }
+.focus-lic__btn[disabled] { opacity: 0.55; cursor: default; }
+
+/* ── Messages ── */
+.focus-lic__messages:empty { display: none; }
+.focus-lic__message { border: 1px solid; border-radius: 3px; padding: 1rem 1.4rem; font-size: 1.35rem; margin-bottom: 8px; }
+.focus-lic__message--ok { border-color: #cfe3ab; background: #e8f1d9; color: #435e12; }
+.focus-lic__message--error { border-color: #efc4c4; background: #fbe9e9; color: #8c1c1c; }
+
+/* ── Cards ── */
+.focus-lic__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+.focus-lic__card { background: #fff; border: 1px solid #e3e3e3; border-radius: 4px; min-width: 0; }
+.focus-lic__card-head {
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    padding: 1.2rem 1.8rem; border-bottom: 1px solid #e3e3e3;
+}
+.focus-lic__card-head h3 {
+    font-size: 1.25rem; margin: 0; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #757069; font-weight: 600;
+}
+.focus-lic__card-body { padding: 1.5rem 1.8rem; }
+.focus-lic__muted { color: #757069; }
+
+/* ── Hero card ── */
+.focus-lic__card--hero { padding: 1.8rem; border-left: 4px solid #e3e3e3; }
+.focus-lic__card--ok { border-left-color: #79a22e; }
+.focus-lic__card--warn { border-left-color: #d07d00; }
+.focus-lic__card--crit { border-left-color: #e22626; }
+.focus-lic__card--neutral { border-left-color: #adadad; }
+
+.focus-lic__hero-row { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+.focus-lic__hero-dot { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; flex: none; }
+.focus-lic__hero-dot::after { content: ""; width: 20px; height: 20px; border-radius: 50%; }
+.focus-lic__hero-dot--ok { background: #e8f1d9; } .focus-lic__hero-dot--ok::after { background: #79a22e; }
+.focus-lic__hero-dot--warn { background: #fdf0d5; } .focus-lic__hero-dot--warn::after { background: #d07d00; }
+.focus-lic__hero-dot--crit { background: #fbe9e9; } .focus-lic__hero-dot--crit::after { background: #e22626; }
+.focus-lic__hero-dot--neutral { background: #ececec; } .focus-lic__hero-dot--neutral::after { background: #8f8f8f; }
+
+.focus-lic__hero-main { display: flex; flex-direction: column; gap: 4px; min-width: 260px; flex: 1 1 300px; }
+.focus-lic__hero-title { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.focus-lic__hero-state { font-size: 1.9rem; font-weight: 700; color: #303030; }
+.focus-lic__hero-desc { margin: 0; font-size: 1.35rem; color: #575049; max-width: 72ch; }
+
+.focus-lic__badge {
+    display: inline-block; padding: 2px 10px; border-radius: 10px;
+    font-size: 1.1rem; font-weight: 700; letter-spacing: 0.04em; white-space: nowrap;
+}
+.focus-lic__badge--ok { background: #e8f1d9; color: #4c6b14; }
+.focus-lic__badge--warn { background: #fdf0d5; color: #8a5200; }
+.focus-lic__badge--crit { background: #fbe9e9; color: #a51818; }
+.focus-lic__badge--neutral { background: #ececec; color: #5a544e; }
+
+.focus-lic__meter { flex: 1 1 280px; min-width: 240px; }
+.focus-lic__meter-track { height: 7px; border-radius: 4px; background: #ececec; overflow: hidden; }
+.focus-lic__meter-fill { height: 100%; }
+.focus-lic__meter-fill--ok { background: #79a22e; }
+.focus-lic__meter-fill--warn { background: #d07d00; }
+.focus-lic__meter-fill--crit { background: #e22626; }
+.focus-lic__meter-fill--neutral { background: #8f8f8f; }
+.focus-lic__meter-labels { display: flex; justify-content: space-between; gap: 12px; font-size: 1.15rem; color: #757069; margin-top: 5px; flex-wrap: wrap; }
+
+/* ── Fact strip under the hero ── */
+.focus-lic__facts {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1.4rem 2.4rem; margin: 1.8rem 0 0; padding: 1.4rem 0 0; border-top: 1px solid #efefef;
+}
+.focus-lic__facts > div { min-width: 0; }
+.focus-lic__facts dt { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; color: #8d867e; margin: 0 0 3px; }
+.focus-lic__facts dd { margin: 0; font-size: 1.4rem; color: #303030; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.focus-lic__facts code, .focus-lic__kv code {
+    font-family: 'Courier New', Courier, monospace; font-size: 1.25rem;
+    background: #f3f2f1; padding: 1px 6px; border-radius: 3px; color: #443f3a;
+}
+
+/* ── Key/value lists in regular cards ── */
+.focus-lic__kv { display: grid; grid-template-columns: max-content 1fr; gap: 0.8rem 2.4rem; margin: 0; font-size: 1.35rem; }
+.focus-lic__kv dt { color: #757069; }
+.focus-lic__kv dd { margin: 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+/* ── Tables inside cards ── */
+.focus-lic__table { width: 100%; border-collapse: collapse; font-size: 1.35rem; }
+.focus-lic__table th {
+    text-align: left; color: #757069; font-weight: 600; font-size: 1.15rem;
+    text-transform: uppercase; letter-spacing: 0.04em; padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid #e3e3e3; white-space: nowrap;
+}
+.focus-lic__table td { padding: 0.9rem 1.2rem; border-bottom: 1px solid #f0efee; vertical-align: middle; }
+.focus-lic__table tr:last-child td { border-bottom: 0; }
+.focus-lic__table-wrap { overflow-x: auto; }
+.focus-lic__yes { color: #79a22e; font-weight: 700; }
+.focus-lic__no { color: #e22626; font-weight: 700; }
+
+/* Busy state while an AJAX action runs */
+.focus-lic--busy { opacity: 0.6; pointer-events: none; }
+
+@media (max-width: 767px) {
+    .focus-lic__kv { grid-template-columns: 1fr; gap: 0.2rem 0; }
+    .focus-lic__kv dt { margin-top: 0.8rem; }
+}
+
+/* ── Diagnostics card ── */
+.focus-lic__diag-group {
+    margin: 1.6rem 0 0.8rem; font-size: 1.15rem; text-transform: uppercase;
+    letter-spacing: 0.05em; color: #8d867e; font-weight: 600;
+}
+.focus-lic__diag-group:first-child { margin-top: 0; }
+.focus-lic__kv--tight { gap: 0.5rem 2rem; }
+
+.focus-lic__test-results:empty { display: none; }
+.focus-lic__checks { list-style: none; margin: 1.6rem 0 0; padding: 1.2rem 1.4rem; background: #f8f8f8; border-radius: 3px; }
+.focus-lic__checks li { padding: 0.4rem 0 0.4rem 2.4rem; position: relative; font-size: 1.3rem; }
+.focus-lic__checks li::before { position: absolute; left: 0.2rem; font-weight: 700; }
+.focus-lic__check--ok::before { content: "✓"; color: #79a22e; }
+.focus-lic__check--fail::before { content: "✕"; color: #e22626; }
+
+/* ── Domains card ── */
+.focus-lic__current-tag {
+    font-size: 1rem; font-weight: 700; color: #eb5202; border: 1px solid #eb5202;
+    border-radius: 3px; padding: 1px 6px; margin-left: 8px; white-space: nowrap; letter-spacing: 0.04em;
+}
+
+/* ── Developer panel ── */
+.focus-lic__dev { border: 1px dashed #c9c2ba; border-radius: 4px; background: #faf9f8; }
+.focus-lic__dev summary { cursor: pointer; padding: 1rem 1.4rem; font-size: 1.25rem; color: #757069; }
+.focus-lic__dev-body { padding: 0 1.4rem 1.4rem; }
+.focus-lic__dev-payload {
+    background: #2b2622; color: #d9d2ca; border-radius: 3px; padding: 1.2rem 1.4rem;
+    font-family: 'Courier New', Courier, monospace; font-size: 1.2rem; overflow-x: auto; margin: 0;
+}
+
+/* ── Focus logo on the system-configuration tab (Amasty-style) ── */
+.config-nav-block.focus-tab strong:before {
+    background: url('../images/focus-icon-color.svg') no-repeat center;
+    background-size: contain;
+    content: '';
+    display: inline-block;
+    height: 18px;
+    margin-right: 10px;
+    vertical-align: bottom;
+    width: 22px;
+}

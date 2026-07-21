@@ -1,0 +1,55 @@
+<?php
+/**
+ * Focus Licensing dashboard shell — cards render below, actions on top.
+ *
+ * @var \Focus\Licensing\Block\Adminhtml\Dashboard\View $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+$state = $block->getLicenseState();
+$hasState = $state->getState() !== null;
+?>
+<div id="focus-lic-dashboard"
+     class="focus-lic"
+     data-mage-init='{"focusLicenseActions": <?= /* @noEscape */ $block->getActionUrlsJson() ?>}'>
+
+    <div class="focus-lic__messages" data-role="focus-lic-messages" aria-live="polite"></div>
+
+    <div class="focus-lic__toolbar">
+        <div class="focus-lic__toolbar-title">
+            <span class="focus-lic__logo" aria-hidden="true">F</span>
+            <span><?= $escaper->escapeHtml(__('Focus License')) ?></span>
+        </div>
+        <div class="focus-lic__toolbar-actions">
+            <?php if ($hasState): ?>
+                <button type="button" class="focus-lic__btn" data-role="focus-lic-action" data-action="refresh"
+                        title="<?= $escaper->escapeHtmlAttr(__('Download the latest signed license payload and replace the local cache')) ?>">
+                    <?= $escaper->escapeHtml(__('Refresh License')) ?>
+                </button>
+                <button type="button" class="focus-lic__btn focus-lic__btn--primary" data-role="focus-lic-action" data-action="validate">
+                    <?= $escaper->escapeHtml(__('Validate Now')) ?>
+                </button>
+                <button type="button" class="focus-lic__btn focus-lic__btn--danger" data-role="focus-lic-action" data-action="deactivate"
+                        data-confirm="<?= $escaper->escapeHtmlAttr(__('This will release the registered production domain from this store. Commercial modules will switch to restricted mode until you activate again. Continue?')) ?>">
+                    <?= $escaper->escapeHtml(__('Deactivate')) ?>
+                </button>
+            <?php else: ?>
+                <button type="button" class="focus-lic__btn focus-lic__btn--primary" data-role="focus-lic-action" data-action="validate">
+                    <?= $escaper->escapeHtml(__('Activate License')) ?>
+                </button>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <?= /* @noEscape */ $block->renderCard('Focus_Licensing::dashboard/card/status.phtml') ?>
+
+    <?= /* @noEscape */ $block->renderCard('Focus_Licensing::dashboard/card/modules.phtml') ?>
+
+    <?= /* @noEscape */ $block->renderCard('Focus_Licensing::dashboard/card/domains.phtml') ?>
+
+    <div class="focus-lic__grid">
+        <?= /* @noEscape */ $block->renderCard('Focus_Licensing::dashboard/card/info.phtml') ?>
+        <?= /* @noEscape */ $block->renderCard('Focus_Licensing::dashboard/card/diagnostics.phtml') ?>
+    </div>
+
+    <?= /* @noEscape */ $block->renderCard('Focus_Licensing::dashboard/card/developer.phtml') ?>
+</div>

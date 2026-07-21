@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Service contract preferences -->
+    <preference for="Focus\Licensing\Api\LicenseGuardInterface"
+                type="Focus\Licensing\Service\LicenseGuard"/>
+
+    <preference for="Focus\Licensing\Api\ModuleDiscoveryInterface"
+                type="Focus\Licensing\Model\ModuleDiscovery"/>
+
+    <preference for="Focus\Licensing\Api\LicenseClientInterface"
+                type="Focus\Licensing\Service\LicenseClient"/>
+
+    <preference for="Focus\Licensing\Api\ProtectedModuleRegistryInterface"
+                type="Focus\Licensing\Model\Enforcement\ProtectedModuleRegistry"/>
+
+    <!-- =====================================================================
+         Phase 3 enforcement — declaration mechanism (focus_licensing.xml)
+
+         Standard Magento config pipeline: the Reader merges every module's
+         etc/focus_licensing.xml, the Data object caches the merged result, and
+         ProtectedModuleRegistry consumes it. See LICENSING_PHASE3_ENFORCEMENT.md.
+    ===================================================================== -->
+    <virtualType name="Focus\Licensing\Config\Data" type="Magento\Framework\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Focus\Licensing\Config\Reader</argument>
+            <argument name="cacheId" xsi:type="string">focus_licensing_protected_modules</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Focus\Licensing\Model\Enforcement\ProtectedModuleRegistry">
+        <arguments>
+            <argument name="config" xsi:type="object">Focus\Licensing\Config\Data</argument>
+        </arguments>
+    </type>
+
+    <!-- ===== Enforcement guard plugins (all fail-open, per-request memoized) ===== -->
+    <!-- Controller guard: admin + frontend -->
+    <type name="Magento\Framework\App\ActionInterface">
+        <plugin name="focus_licensing_controller_guard"
+                type="Focus\Licensing\Plugin\Enforcement\ControllerGuardPlugin"
+                sortOrder="10"/>
+    </type>
+    <!-- CLI guard -->
+    <type name="Symfony\Component\Console\Command\Command">
+        <plugin name="focus_licensing_command_guard"
+                type="Focus\Licensing\Plugin\Enforcement\CommandGuardPlugin"
+                sortOrder="10"/>
+    </type>
+    <!-- Observer guard -->
+    <type name="Magento\Framework\Event\Invoker\InvokerDefault">
+        <plugin name="focus_licensing_observer_guard"
+                type="Focus\Licensing\Plugin\Enforcement\ObserverGuardPlugin"
+                sortOrder="10"/>
+    </type>
+    <!-- Block guard: a commercial module's blocks injected into CORE pages
+         (PDP/category) render empty when unlicensed. This is what protects
+         "block-only" modules without a per-block hard check. -->
+    <type name="Magento\Framework\View\Element\AbstractBlock">
+        <plugin name="focus_licensing_block_guard"
+                type="Focus\Licensing\Plugin\Enforcement\BlockGuardPlugin"
+                sortOrder="10"/>
+    </type>
+
+    <!-- ===== Custom logger: var/log/focus_licensing.log ===== -->
+    <type name="Focus\Licensing\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Focus\Licensing\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">FocusLicensing</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="system" xsi:type="object">Focus\Licensing\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+
+
+</config>

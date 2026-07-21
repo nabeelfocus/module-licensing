@@ -1,0 +1,36 @@
+<?php
+/**
+ * License Information card — validation schedule & sync detail.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+/** @var \Focus\Licensing\ViewModel\Dashboard\LicenseState $state */
+$state = $block->getData('license_state');
+$next = $state->getNextValidationAt();
+?>
+<div class="focus-lic__card">
+    <div class="focus-lic__card-head">
+        <h3><?= $escaper->escapeHtml(__('Validation Schedule')) ?></h3>
+    </div>
+    <div class="focus-lic__card-body">
+        <dl class="focus-lic__kv">
+            <dt><?= $escaper->escapeHtml(__('Last Validation')) ?></dt>
+            <dd><?= $escaper->escapeHtml($state->formatDate($state->getLastSyncedAt(), true)) ?></dd>
+
+            <dt><?= $escaper->escapeHtml(__('Next Validation')) ?></dt>
+            <dd>
+                <?php if ($next !== null): ?>
+                    <?= $escaper->escapeHtml($state->formatDate($next, true)) ?>
+                <?php else: ?>
+                    <?= $escaper->escapeHtml(__('Nightly at 01:30 UTC (cron)')) ?>
+                <?php endif; ?>
+            </dd>
+
+            <dt><?= $escaper->escapeHtml(__('How updates arrive')) ?></dt>
+            <dd class="focus-lic__muted">
+                <?= $escaper->escapeHtml(__('License changes made by Focus (new modules, renewals) are picked up automatically on the next validation — no re-activation needed.')) ?>
+            </dd>
+        </dl>
+    </div>
+</div>

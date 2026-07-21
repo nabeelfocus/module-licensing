@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Schema for etc/focus_licensing.xml — the per-module declaration that marks a
+ * commercial Focus module as "guarded" by the central enforcement layer.
+ *
+ * The declaration only registers the module as commercial. Whether it is
+ * *licensed* remains decided by the signed allowed_modules payload verified by
+ * LicenseGuard — this file never grants a license.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="module" type="moduleDeclaration" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+        <!-- A module may only be declared once across all merged files -->
+        <xs:unique name="uniqueModuleName">
+            <xs:selector xpath="module"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="moduleDeclaration">
+        <xs:attribute name="name" type="moduleName" use="required"/>
+        <xs:attribute name="label" type="xs:string" use="optional"/>
+        <xs:attribute name="enabled" type="xs:boolean" use="optional"/>
+    </xs:complexType>
+
+    <!-- Magento module identifier, e.g. Focus_StorageAddons -->
+    <xs:simpleType name="moduleName">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z][a-zA-Z0-9]+_[A-Z][a-zA-Z0-9]+"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

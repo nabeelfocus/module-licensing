@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">focus_licensing_modules_listing.focus_licensing_modules_listing_data_source</item>
+        </item>
+    </argument>
+
+    <settings>
+        <spinner>focus_licensing_modules_columns</spinner>
+        <deps>
+            <dep>focus_licensing_modules_listing.focus_licensing_modules_listing_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="focus_licensing_modules_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">module_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Focus_Licensing::modules</aclResource>
+        <dataProvider class="Focus\Licensing\Ui\DataProvider\CommercialModulesProvider"
+                      name="focus_licensing_modules_listing_data_source">
+            <settings>
+                <requestFieldName>module_id</requestFieldName>
+                <primaryFieldName>module_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <columnsControls name="columns_controls"/>
+    </listingToolbar>
+
+    <columns name="focus_licensing_modules_columns">
+        <column name="module">
+            <settings>
+                <label translate="true">Module</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="version">
+            <settings>
+                <label translate="true">Installed Version</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="enabled">
+            <settings>
+                <label translate="true">Enabled</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="license_status">
+            <settings>
+                <label translate="true">License Status</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="reason">
+            <settings>
+                <label translate="true">Restriction Reason</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="last_validation">
+            <settings>
+                <label translate="true">Last Validation</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+    </columns>
+
+</listing>

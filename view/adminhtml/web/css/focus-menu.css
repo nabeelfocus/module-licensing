@@ -1,0 +1,14 @@
+/**
+ * Focus admin menu icon — replaces the default Admin Icons glyph on the
+ * top-level "Focus" menu item with the Focus logo (same technique Amasty
+ * Base uses for its menu entry).
+ */
+#menu-focus-licensing-focus > a:before {
+    background: url('../images/focus-icon.svg') no-repeat center;
+    background-size: contain;
+    content: '';
+    display: block;
+    height: 2.6rem;
+    margin: 0 auto;
+    width: 2.6rem;
+}

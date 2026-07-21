@@ -1,0 +1,59 @@
+<?php
+/**
+ * Registered Domains card — informational list from the latest server
+ * response; the current store is tagged.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+/** @var \Focus\Licensing\ViewModel\Dashboard\Domains $domains */
+$domains = $block->getData('domains');
+/** @var \Focus\Licensing\ViewModel\Dashboard\LicenseState $state */
+$state = $block->getData('license_state');
+$rows = $domains->getRows();
+?>
+<?php if (!empty($rows)): ?>
+<div class="focus-lic__card focus-lic__card--wide">
+    <div class="focus-lic__card-head">
+        <h3><?= $escaper->escapeHtml(__('Registered Domains')) ?></h3>
+        <span class="focus-lic__muted"><?= $escaper->escapeHtml(__('As reported by the license server on the last synchronization')) ?></span>
+    </div>
+    <div class="focus-lic__table-wrap">
+        <table class="focus-lic__table">
+            <thead>
+                <tr>
+                    <th><?= $escaper->escapeHtml(__('Domain')) ?></th>
+                    <th><?= $escaper->escapeHtml(__('Environment')) ?></th>
+                    <th><?= $escaper->escapeHtml(__('Activated')) ?></th>
+                    <th><?= $escaper->escapeHtml(__('Last Validated')) ?></th>
+                    <th><?= $escaper->escapeHtml(__('Status')) ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($rows as $row): ?>
+                    <tr>
+                        <td>
+                            <code><?= $escaper->escapeHtml($row['domain']) ?></code>
+                            <?php if ($row['is_current']): ?>
+                                <span class="focus-lic__current-tag"><?= $escaper->escapeHtml(__('THIS STORE')) ?></span>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if ($row['type'] !== ''): ?>
+                                <span class="focus-lic__badge focus-lic__badge--neutral"><?= $escaper->escapeHtml($row['type']) ?></span>
+                            <?php else: ?>—<?php endif; ?>
+                        </td>
+                        <td><?= $escaper->escapeHtml($state->formatDate($row['activated_at'])) ?></td>
+                        <td><?= $escaper->escapeHtml($state->formatDate($row['last_validated_at'], true)) ?></td>
+                        <td>
+                            <span class="focus-lic__badge focus-lic__badge--<?= $row['status'] === 'active' ? 'ok' : 'neutral' ?>">
+                                <?= $escaper->escapeHtml($row['status'] ?: '—') ?>
+                            </span>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<?php endif; ?>
