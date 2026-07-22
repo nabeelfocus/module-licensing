@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Focus\Licensing\ViewModel\Dashboard;
 
 use Focus\Licensing\Api\LicenseGuardInterface;
+use Focus\Licensing\Model\Enforcement\ModuleLabelResolver;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\Module\ModuleListInterface;
@@ -48,6 +49,7 @@ class ModuleStatus implements ArgumentInterface
      * @param PackageInfo $packageInfo
      * @param LicenseGuardInterface $licenseGuard
      * @param LicenseState $licenseState
+     * @param ModuleLabelResolver $labelResolver
      */
     public function __construct(
         private readonly FullModuleList $fullModuleList,
@@ -55,13 +57,14 @@ class ModuleStatus implements ArgumentInterface
         private readonly ModuleListInterface $moduleList,
         private readonly PackageInfo $packageInfo,
         private readonly LicenseGuardInterface $licenseGuard,
-        private readonly LicenseState $licenseState
+        private readonly LicenseState $licenseState,
+        private readonly ModuleLabelResolver $labelResolver
     ) {}
 
     /**
      * @return array<int, array{
-     *     module: string, version: string, installed: bool, enabled: bool,
-     *     licensed: bool, status: string, status_label: string,
+     *     module: string, label: string, version: string, installed: bool,
+     *     enabled: bool, licensed: bool, status: string, status_label: string,
      *     severity: string, reason: string, last_validation: ?string
      * }>
      */
@@ -94,6 +97,7 @@ class ModuleStatus implements ArgumentInterface
 
             $rows[] = [
                 'module'          => $moduleName,
+                'label'           => $this->labelResolver->getLabel($moduleName),
                 'version'         => $this->resolveVersion($moduleName),
                 'installed'       => true,
                 'enabled'         => $enabled,
@@ -219,7 +223,7 @@ class ModuleStatus implements ArgumentInterface
             LicenseState::STATUS_SUSPENDED     => (string) __('License suspended.'),
             LicenseState::STATUS_INVALID       => (string) __('License invalid.'),
             LicenseState::STATUS_VALIDATION_REQUIRED => (string) __('License validation overdue (offline grace ended).'),
-            default => (string) __('Not included in your license — contact Focus to add %1.', $moduleName),
+            default => (string) __('Not included in your license — contact Focus to add %1.', $this->labelResolver->getLabel($moduleName)),
         };
     }
 

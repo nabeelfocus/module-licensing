@@ -40,9 +40,15 @@
     </listingToolbar>
 
     <columns name="focus_licensing_modules_columns">
-        <column name="module">
+        <column name="label">
             <settings>
                 <label translate="true">Module</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="module">
+            <settings>
+                <label translate="true">Module ID</label>
                 <sortable>false</sortable>
             </settings>
         </column>

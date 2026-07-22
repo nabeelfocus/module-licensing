@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Focus\Licensing\Plugin\Enforcement;
 
-use Focus\Licensing\Api\ProtectedModuleRegistryInterface;
+use Focus\Licensing\Model\Enforcement\ModuleLabelResolver;
 use Focus\Licensing\Model\Enforcement\EnforcementGuard;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
@@ -25,11 +25,11 @@ class CommandGuardPlugin
 {
     /**
      * @param EnforcementGuard $enforcementGuard
-     * @param ProtectedModuleRegistryInterface $registry
+     * @param ModuleLabelResolver $labelResolver
      */
     public function __construct(
         private readonly EnforcementGuard $enforcementGuard,
-        private readonly ProtectedModuleRegistryInterface $registry
+        private readonly ModuleLabelResolver $labelResolver
     ) {}
 
     /**
@@ -49,7 +49,7 @@ class CommandGuardPlugin
         $output->writeln(sprintf(
             '<error>%s is not licensed on this store — command refused. '
             . 'Verify the license under Stores > Configuration > Focus > Licensing or contact Focus support.</error>',
-            $this->registry->getLabel($blockedModule)
+            $this->labelResolver->getLabel($blockedModule)
         ));
 
         return Cli::RETURN_FAILURE;

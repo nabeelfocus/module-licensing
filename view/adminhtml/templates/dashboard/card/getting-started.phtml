@@ -1,0 +1,72 @@
+<?php
+/**
+ * Getting Started card — shown only before the store has a working license.
+ *
+ * A fresh install has no key and therefore no allowed modules, which would
+ * otherwise render as a full table of restricted rows: a screen that reads as
+ * a fault rather than as work not yet started. This card replaces that with
+ * the three steps to a working license, and marks where the admin currently is.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+/** @var \Focus\Licensing\ViewModel\Dashboard\LicenseState $state */
+$state = $block->getData('license_state');
+/** @var \Focus\Licensing\ViewModel\Dashboard\ModuleStatus $modules */
+$modules = $block->getData('module_status');
+
+$hasKey = $state->isKeyConfigured();
+$installed = $modules->getInstalledCount();
+
+// Step 2 is current until a key exists; then step 3 is where the store is.
+$steps = [
+    [
+        'state' => 'done',
+        'mark'  => '✓',
+        'title' => __('Modules installed'),
+        'text'  => __('%1 Focus modules detected on this store.', (string) $installed),
+    ],
+    [
+        'state' => $hasKey ? 'done' : 'now',
+        'mark'  => $hasKey ? '✓' : '2',
+        'title' => __('Enter your license key'),
+        'text'  => $hasKey
+            ? __('A license key is saved for this store.')
+            : __('Sent with your order confirmation. Paste it into the General section below, then click Save Config.'),
+    ],
+    [
+        'state' => $hasKey ? 'now' : 'next',
+        'mark'  => '3',
+        'title' => __('Activation'),
+        'text'  => $hasKey
+            ? __('This store has not been activated yet. Click Activate License above — the domain is registered and your licensed modules switch on straight away.')
+            : __('Happens automatically when you save. This domain is registered and your licensed modules switch on straight away.'),
+    ],
+];
+?>
+<div class="focus-lic__card">
+    <div class="focus-lic__card-head">
+        <h3><?= $escaper->escapeHtml(__('Getting Started')) ?></h3>
+        <span class="focus-lic__muted"><?= $escaper->escapeHtml(__('About a minute')) ?></span>
+    </div>
+    <div class="focus-lic__card-body">
+        <?php foreach ($steps as $step): ?>
+            <div class="focus-lic__step">
+                <span class="focus-lic__step-n focus-lic__step-n--<?= $escaper->escapeHtmlAttr($step['state']) ?>"
+                      aria-hidden="true"><?= $escaper->escapeHtml($step['mark']) ?></span>
+                <div>
+                    <div class="focus-lic__step-t"><?= $escaper->escapeHtml($step['title']) ?></div>
+                    <div class="focus-lic__step-d"><?= $escaper->escapeHtml($step['text']) ?></div>
+                    <?php if ($step['state'] === 'now' && !$hasKey): ?>
+                        <div class="focus-lic__step-actions">
+                            <button type="button" class="focus-lic__btn focus-lic__btn--primary"
+                                    data-role="focus-lic-goto-key">
+                                <?= $escaper->escapeHtml(__('Go to license key field')) ?>
+                            </button>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>

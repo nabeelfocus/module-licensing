@@ -121,6 +121,14 @@
 .focus-lic__row--muted td { background: #fbfaf9; color: #8d867e; }
 .focus-lic__row-reason { font-size: 1.15rem; margin-top: 2px; }
 
+/* Merchant-facing name first, technical identifier demoted beneath it */
+.focus-lic__mod-name { font-weight: 600; color: #303030; }
+.focus-lic__row--muted .focus-lic__mod-name { font-weight: 500; color: #6f6862; }
+.focus-lic__mod-id {
+    font-family: 'Courier New', Courier, monospace; font-size: 1.1rem;
+    color: #9b938b; margin-top: 1px;
+}
+
 /* ── Module filter chips + search ── */
 .focus-lic__filters {
     display: flex; justify-content: space-between; align-items: center; gap: 1.2rem;
@@ -142,6 +150,30 @@
 }
 .focus-lic__empty { margin: 0; padding: 2.6rem 1.8rem; text-align: center; color: #8d867e; font-size: 1.35rem; }
 .focus-lic__empty[hidden] { display: none; }
+
+/* ── First run ── */
+.focus-lic__awaiting {
+    padding: 2.6rem 1.8rem; text-align: center; color: #8d867e; font-size: 1.3rem;
+    display: flex; flex-direction: column; gap: 0.4rem;
+}
+.focus-lic__awaiting b { color: #514943; font-size: 1.4rem; font-weight: 600; }
+
+.focus-lic__step {
+    display: grid; grid-template-columns: 3.4rem 1fr; gap: 1.4rem;
+    align-items: start; padding: 1.3rem 0; border-bottom: 1px solid #f2f1f0;
+}
+.focus-lic__step:first-child { padding-top: 0; }
+.focus-lic__step:last-child { padding-bottom: 0; border-bottom: 0; }
+.focus-lic__step-n {
+    width: 3rem; height: 3rem; border-radius: 50%; display: grid; place-items: center;
+    font-weight: 700; font-size: 1.3rem;
+}
+.focus-lic__step-n--done { background: #e8f1d9; color: #4c6b14; }
+.focus-lic__step-n--now  { background: #eb5202; color: #fff; }
+.focus-lic__step-n--next { background: #ececec; color: #8d867e; }
+.focus-lic__step-t { font-weight: 600; font-size: 1.4rem; color: #303030; }
+.focus-lic__step-d { font-size: 1.3rem; color: #8d867e; margin-top: 2px; max-width: 76ch; }
+.focus-lic__step-actions { margin-top: 0.9rem; display: flex; gap: 8px; flex-wrap: wrap; }
 
 /* Busy state while an AJAX action runs */
 .focus-lic--busy { opacity: 0.6; pointer-events: none; }

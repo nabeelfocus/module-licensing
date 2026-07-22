@@ -12,8 +12,15 @@
  */
 /** @var \Focus\Licensing\ViewModel\Dashboard\ModuleStatus $modules */
 $modules = $block->getData('module_status');
+/** @var \Focus\Licensing\ViewModel\Dashboard\LicenseState $state */
+$state = $block->getData('license_state');
+
 $rows = $modules->getRows();
 $counts = $modules->getFilterCounts();
+
+// With no verified license every module would render as restricted, which reads
+// as breakage rather than as setup still pending. Collapse to a single line.
+$awaitingActivation = $state->getState() === null;
 
 $chips = [
     'attention' => __('Needs attention'),
@@ -22,7 +29,8 @@ $chips = [
     'all'       => __('All'),
 ];
 ?>
-<div class="focus-lic__card focus-lic__card--wide" data-mage-init='{"focusModuleFilter": {}}'>
+<?php $needsFilter = !empty($rows) && !$awaitingActivation; ?>
+<div class="focus-lic__card focus-lic__card--wide"<?= $needsFilter ? ' data-mage-init=\'{"focusModuleFilter": {}}\'' : '' ?>>
     <div class="focus-lic__card-head">
         <h3><?= $escaper->escapeHtml(__('Commercial Modules')) ?></h3>
         <span class="focus-lic__muted">
@@ -36,6 +44,11 @@ $chips = [
 
     <?php if (empty($rows)): ?>
         <p class="focus-lic__card-body focus-lic__muted"><?= $escaper->escapeHtml(__('No commercial Focus modules are installed on this store.')) ?></p>
+    <?php elseif ($awaitingActivation): ?>
+        <div class="focus-lic__awaiting">
+            <b><?= $escaper->escapeHtml(__('%1 modules are installed and waiting for activation.', (string) $modules->getInstalledCount())) ?></b>
+            <span><?= $escaper->escapeHtml(__('They will be listed here once your license key is saved.')) ?></span>
+        </div>
     <?php else: ?>
         <div class="focus-lic__filters">
             <div class="focus-lic__chips" role="group" aria-label="<?= $escaper->escapeHtmlAttr(__('Filter modules')) ?>">
@@ -74,10 +87,11 @@ $chips = [
                         <tr data-role="focus-lic-module-row"
                             data-status="<?= $escaper->escapeHtmlAttr($row['status']) ?>"
                             data-attention="<?= $needsAttention ? '1' : '0' ?>"
-                            data-name="<?= $escaper->escapeHtmlAttr(strtolower($row['module'])) ?>"
+                            data-name="<?= $escaper->escapeHtmlAttr(strtolower($row['label'] . ' ' . $row['module'])) ?>"
                             <?= $row['enabled'] ? '' : 'class="focus-lic__row--muted"' ?>>
                             <td>
-                                <?= $escaper->escapeHtml($row['module']) ?>
+                                <div class="focus-lic__mod-name"><?= $escaper->escapeHtml($row['label']) ?></div>
+                                <div class="focus-lic__mod-id"><?= $escaper->escapeHtml($row['module']) ?></div>
                                 <?php if ($row['reason'] !== ''): ?>
                                     <div class="focus-lic__muted focus-lic__row-reason"><?= $escaper->escapeHtml($row['reason']) ?></div>
                                 <?php endif; ?>

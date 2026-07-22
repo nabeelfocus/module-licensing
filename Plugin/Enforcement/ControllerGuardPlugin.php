@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Focus\Licensing\Plugin\Enforcement;
 
-use Focus\Licensing\Api\ProtectedModuleRegistryInterface;
+use Focus\Licensing\Model\Enforcement\ModuleLabelResolver;
 use Focus\Licensing\Logger\Logger;
 use Focus\Licensing\Model\Enforcement\EnforcementGuard;
 use Magento\Framework\App\ActionInterface;
@@ -35,7 +35,7 @@ class ControllerGuardPlugin
 {
     /**
      * @param EnforcementGuard $enforcementGuard
-     * @param ProtectedModuleRegistryInterface $registry
+     * @param ModuleLabelResolver $labelResolver
      * @param State $appState
      * @param ResultFactory $resultFactory
      * @param UrlInterface $url
@@ -44,7 +44,7 @@ class ControllerGuardPlugin
      */
     public function __construct(
         private readonly EnforcementGuard $enforcementGuard,
-        private readonly ProtectedModuleRegistryInterface $registry,
+        private readonly ModuleLabelResolver $labelResolver,
         private readonly State $appState,
         private readonly ResultFactory $resultFactory,
         private readonly UrlInterface $url,
@@ -80,7 +80,7 @@ class ControllerGuardPlugin
      */
     private function buildBlockedResult(string $moduleName)
     {
-        $label = $this->registry->getLabel($moduleName);
+        $label = $this->labelResolver->getLabel($moduleName);
 
         if ($this->isAdmin()) {
             $this->messageManager->addErrorMessage(

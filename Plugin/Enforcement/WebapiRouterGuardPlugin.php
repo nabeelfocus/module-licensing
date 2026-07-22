@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Focus\Licensing\Plugin\Enforcement;
 
-use Focus\Licensing\Api\ProtectedModuleRegistryInterface;
+use Focus\Licensing\Model\Enforcement\ModuleLabelResolver;
 use Focus\Licensing\Model\Enforcement\EnforcementGuard;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Controller\Rest\Router;
@@ -27,11 +27,11 @@ class WebapiRouterGuardPlugin
 {
     /**
      * @param EnforcementGuard $enforcementGuard
-     * @param ProtectedModuleRegistryInterface $registry
+     * @param ModuleLabelResolver $labelResolver
      */
     public function __construct(
         private readonly EnforcementGuard $enforcementGuard,
-        private readonly ProtectedModuleRegistryInterface $registry
+        private readonly ModuleLabelResolver $labelResolver
     ) {}
 
     /**
@@ -52,7 +52,7 @@ class WebapiRouterGuardPlugin
             throw new WebapiException(
                 __(
                     '%1 is not licensed on this store. This API endpoint is unavailable in restricted mode.',
-                    $this->registry->getLabel($blockedModule)
+                    $this->labelResolver->getLabel($blockedModule)
                 ),
                 0,
                 WebapiException::HTTP_FORBIDDEN

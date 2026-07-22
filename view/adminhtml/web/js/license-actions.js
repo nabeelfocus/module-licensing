@@ -84,6 +84,29 @@ define([
                 });
         }
 
+        /**
+         * First-run helper: reveal the License Key field further down the same
+         * configuration page. The General group ships collapsed, so it has to
+         * be opened before the field can be scrolled to or focused.
+         */
+        $root.on('click', '[data-role="focus-lic-goto-key"]', function () {
+            var $field = $('#focus_licensing_general_license_key'),
+                $head = $('#focus_licensing_general-head');
+
+            if (!$field.length) {
+                return;
+            }
+
+            if (!$field.is(':visible') && $head.length) {
+                $head.trigger('click');
+            }
+
+            if ($field[0].scrollIntoView) {
+                $field[0].scrollIntoView({ block: 'center' });
+            }
+            $field.trigger('focus');
+        });
+
         $root.on('click', '[data-role="focus-lic-action"]', function () {
             var $btn = $(this),
                 action = $btn.data('action'),
