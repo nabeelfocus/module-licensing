@@ -39,8 +39,9 @@ define([
             showMessage(!!response.success, response.message || '');
         }
 
-        function run(action) {
-            var url = config[action];
+        function run(action, params) {
+            var url = config[action],
+                data = $.extend({ form_key: window.FORM_KEY }, params || {});
 
             if (!url) {
                 return;
@@ -48,7 +49,7 @@ define([
             $root.addClass('focus-lic--busy');
 
             if (action === 'test') {
-                $.post(url, { form_key: window.FORM_KEY })
+                $.post(url, data)
                     .done(renderChecks)
                     .fail(function () {
                         showMessage(false, $t('The request failed. Refresh the page and try again.'));
@@ -60,7 +61,7 @@ define([
                 return;
             }
 
-            $.post(url, { form_key: window.FORM_KEY })
+            $.post(url, data)
                 .done(function (response) {
                     if (response && response.html) {
                         var $fresh = $(response.html);
@@ -107,25 +108,39 @@ define([
             $field.trigger('focus');
         });
 
-        $root.on('click', '[data-role="focus-lic-action"]', function () {
-            var $btn = $(this),
-                action = $btn.data('action'),
-                confirmText = $btn.data('confirm');
-
+        function trigger(action, confirmText, title, params) {
             if (confirmText) {
                 confirm({
-                    title: $t('Deactivate License'),
+                    title: title,
                     content: confirmText,
                     actions: {
                         confirm: function () {
-                            run(action);
+                            run(action, params);
                         }
                     }
                 });
 
                 return;
             }
-            run(action);
+            run(action, params);
+        }
+
+        $root.on('click', '[data-role="focus-lic-action"]', function () {
+            var $btn = $(this);
+
+            trigger($btn.data('action'), $btn.data('confirm'), $t('Deactivate License'));
+        });
+
+        /**
+         * Release the production slot held by another domain on this licence.
+         * This store keeps running — only Deactivate releases the current domain.
+         */
+        $root.on('click', '[data-role="focus-lic-release"]', function () {
+            var $btn = $(this);
+
+            trigger('release', $btn.data('confirm'), $t('Release Domain Slot'), {
+                domain: $btn.data('domain')
+            });
         });
     };
 });

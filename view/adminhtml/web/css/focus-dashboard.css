@@ -175,6 +175,16 @@
 .focus-lic__step-d { font-size: 1.3rem; color: #8d867e; margin-top: 2px; max-width: 76ch; }
 .focus-lic__step-actions { margin-top: 0.9rem; display: flex; gap: 8px; flex-wrap: wrap; }
 
+/* ── Renewal / support actions in the hero ── */
+.focus-lic__hero-actions { margin-top: 1rem; display: flex; gap: 8px; flex-wrap: wrap; }
+.focus-lic__hero-actions .focus-lic__btn { text-decoration: none; display: inline-block; }
+
+/* ── Domain slot management ── */
+.focus-lic__btn--sm { padding: 0.4rem 1rem; font-size: 1.2rem; }
+.focus-lic__domain-action { text-align: right; white-space: nowrap; }
+.focus-lic__domain-action .focus-lic__muted { font-size: 1.15rem; }
+.focus-lic__slots { color: #514943; font-weight: 600; }
+
 /* Busy state while an AJAX action runs */
 .focus-lic--busy { opacity: 0.6; pointer-events: none; }
 

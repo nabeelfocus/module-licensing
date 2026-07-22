@@ -95,11 +95,11 @@ class LicenseClient implements LicenseClientInterface
      * @param array $installedModules
      * @return ?array
      */
-    public function deactivate(string $licenseKey, array $installedModules): ?array
+    public function deactivate(string $licenseKey, array $installedModules, ?string $domain = null): ?array
     {
         return $this->post('/V1/focus-license/deactivate', [
             'licenseKey' => $licenseKey,
-            'domain'     => $this->domainDetector->detect(),
+            'domain'     => $domain !== null && $domain !== '' ? $domain : $this->domainDetector->detect(),
             'modules'    => $installedModules,
         ], 'deactivate');
     }

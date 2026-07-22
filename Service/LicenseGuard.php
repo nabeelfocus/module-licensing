@@ -12,6 +12,7 @@ namespace Focus\Licensing\Service;
 use Focus\Licensing\Api\LicenseClientInterface;
 use Focus\Licensing\Api\LicenseGuardInterface;
 use Focus\Licensing\Api\ModuleDiscoveryInterface;
+use Focus\Licensing\Model\ActivityLog;
 use Focus\Licensing\Model\Config;
 use Focus\Licensing\Model\LicenseCacheManager;
 use Focus\Licensing\Logger\Logger;
@@ -40,13 +41,15 @@ class LicenseGuard implements LicenseGuardInterface
      * @param ModuleDiscoveryInterface $moduleDiscovery
      * @param Config $config
      * @param Logger $logger
+     * @param ActivityLog $activityLog
      */
     public function __construct(
         private readonly LicenseCacheManager $cacheManager,
         private readonly LicenseClientInterface $licenseClient,
         private readonly ModuleDiscoveryInterface $moduleDiscovery,
         private readonly Config $config,
-        private readonly Logger $logger
+        private readonly Logger $logger,
+        private readonly ActivityLog $activityLog
     ) {}
 
     /**
@@ -69,8 +72,10 @@ class LicenseGuard implements LicenseGuardInterface
      * @param ?string $licenseKey
      * @return bool
      */
-    public function forceRevalidate(?string $licenseKey = null): bool
-    {
+    public function forceRevalidate(
+        ?string $licenseKey = null,
+        string $source = ActivityLog::SOURCE_SCHEDULED
+    ): bool {
         $licenseKey = $licenseKey ?: $this->config->getGlobalLicenseKey();
         if (empty($licenseKey)) {
             $this->cacheManager->clear();
@@ -88,6 +93,17 @@ class LicenseGuard implements LicenseGuardInterface
 
         if ($response === null) {
             $this->logger->warning('Focus_Licensing: server unreachable during forceRevalidate');
+            $this->activityLog->record(
+                $source,
+                'UNREACHABLE',
+                false,
+                (int) ($previousState['license_revision'] ?? 0),
+                count($previousState['allowed_modules'] ?? []),
+                $hasState
+                    ? (string) __('Server unreachable — existing licence kept.')
+                    : (string) __('Server unreachable.')
+            );
+
             return false;
         }
 
@@ -102,6 +118,15 @@ class LicenseGuard implements LicenseGuardInterface
             $this->logger->warning('Focus_Licensing: transient server response during forceRevalidate', [
                 'code' => $response['code'] ?? '',
             ]);
+            $this->activityLog->record(
+                $source,
+                (string) ($response['code'] ?? ''),
+                false,
+                (int) ($previousState['license_revision'] ?? 0),
+                count($previousState['allowed_modules'] ?? []),
+                (string) __('Transient server response — existing licence kept, will retry.')
+            );
+
             return false;
         }
 
@@ -117,10 +142,64 @@ class LicenseGuard implements LicenseGuardInterface
             ]);
         }
 
+        $this->activityLog->record(
+            $source,
+            (string) ($response['code'] ?? ''),
+            $isValid,
+            $newRevision,
+            count($response['allowed_modules'] ?? []),
+            $this->describeChange($previousState, $response)
+        );
+
         $this->cacheManager->write($response);
 
         $this->memoryCache = [];
         return $isValid;
+    }
+
+    /**
+     * One line describing what this check changed, for the activity history.
+     *
+     * Module names are reported rather than counts: "Divan Storage Add-ons
+     * added" tells an admin something a revision number never could.
+     *
+     * @param array|null $previous
+     * @param array $response
+     * @return string
+     */
+    private function describeChange(?array $previous, array $response): string
+    {
+        if (($response['success'] ?? false) !== true && ($response['status'] ?? '') !== 'active') {
+            return (string) ($response['message'] ?? __('Licence rejected by the server.'));
+        }
+
+        if ($previous === null) {
+            return (string) __('Licence activated on this store.');
+        }
+
+        $before = $previous['allowed_modules'] ?? [];
+        $after  = $response['allowed_modules'] ?? [];
+        $added   = array_values(array_diff($after, $before));
+        $removed = array_values(array_diff($before, $after));
+
+        $parts = [];
+        if ($added !== []) {
+            $parts[] = (string) __('%1 added', implode(', ', $added));
+        }
+        if ($removed !== []) {
+            $parts[] = (string) __('%1 removed', implode(', ', $removed));
+        }
+
+        if ($parts === []) {
+            return (string) __('No change.');
+        }
+
+        $previousRevision = (int) ($previous['license_revision'] ?? 0);
+        $newRevision = (int) ($response['license_revision'] ?? 0);
+
+        return $newRevision > 0 && $newRevision !== $previousRevision
+            ? (string) __('Revision %1 → %2 · %3', (string) $previousRevision, (string) $newRevision, implode(' · ', $parts))
+            : implode(' · ', $parts);
     }
 
     /**

@@ -12,6 +12,7 @@ namespace Focus\Licensing\ViewModel\Dashboard;
 use Focus\Licensing\Model\Config;
 use Focus\Licensing\Model\LicenseCacheManager;
 use Magento\Cron\Model\ResourceModel\Schedule\CollectionFactory as ScheduleCollectionFactory;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Cron\Model\Schedule;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -43,12 +44,14 @@ class LicenseState implements ArgumentInterface
      * @param Config $config
      * @param ScheduleCollectionFactory $scheduleCollectionFactory
      * @param TimezoneInterface $timezone
+     * @param ProductMetadataInterface $productMetadata
      */
     public function __construct(
         private readonly LicenseCacheManager $cacheManager,
         private readonly Config $config,
         private readonly ScheduleCollectionFactory $scheduleCollectionFactory,
-        private readonly TimezoneInterface $timezone
+        private readonly TimezoneInterface $timezone,
+        private readonly ProductMetadataInterface $productMetadata
     ) {}
 
     /**
@@ -251,6 +254,59 @@ class LicenseState implements ArgumentInterface
         }
 
         return (int) max(2, min(100, round($days / 365 * 100)));
+    }
+
+    /**
+     * Production/IP domain slots this licence permits. 0 = not reported by the
+     * server (older server, or an error response).
+     */
+    public function getMaxDomains(): int
+    {
+        return (int) ($this->getState()['max_domains'] ?? 0);
+    }
+
+    /**
+     * Renewal page URL, or '' when the merchant should not be offered one.
+     */
+    public function getRenewalUrl(): string
+    {
+        return $this->config->getRenewalUrl();
+    }
+
+    /**
+     * mailto: link for the Contact Support button, pre-filled with the
+     * diagnostics support always has to ask for. Returns '' when no support
+     * address is configured.
+     *
+     * The licence key is deliberately sent masked — enough to identify the
+     * licence, never enough to use it.
+     */
+    public function getSupportMailto(): string
+    {
+        $email = $this->config->getSupportEmail();
+        if ($email === '') {
+            return '';
+        }
+
+        $state = $this->getState();
+        $body = implode("\n", [
+            (string) __('Describe the problem here.'),
+            '',
+            '--- ' . __('Licence diagnostics') . ' ---',
+            __('Status') . ': ' . $this->getStatusLabel(),
+            __('Licence key') . ': ' . $this->getMaskedKey(),
+            __('Revision') . ': ' . $this->getRevision(),
+            __('Domain') . ': ' . $this->getDomain(),
+            __('Last result') . ': ' . (string) ($state['code'] ?? '—'),
+            __('Last validated') . ': ' . $this->formatDate($this->getLastSyncedAt(), true),
+            __('Expires') . ': ' . ($this->getExpiresAt() !== null ? $this->formatDate($this->getExpiresAt()) : (string) __('Lifetime')),
+            __('Magento') . ': ' . $this->productMetadata->getVersion(),
+            __('PHP') . ': ' . PHP_VERSION,
+        ]);
+
+        return 'mailto:' . rawurlencode($email)
+            . '?subject=' . rawurlencode((string) __('Focus licence support — %1', $this->getDomain()))
+            . '&body=' . rawurlencode($body);
     }
 
     /**

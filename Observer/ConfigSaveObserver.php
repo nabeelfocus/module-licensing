@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Focus\Licensing\Observer;
 
+use Focus\Licensing\Model\ActivityLog;
 use Focus\Licensing\Api\LicenseGuardInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -35,7 +36,7 @@ class ConfigSaveObserver implements ObserverInterface
     public function execute(Observer $observer): void
     {
         try {
-            $isValid = $this->guard->forceRevalidate();
+            $isValid = $this->guard->forceRevalidate(null, ActivityLog::SOURCE_CONFIG_SAVE);
 
             if ($isValid) {
                 $this->messageManager->addSuccessMessage(

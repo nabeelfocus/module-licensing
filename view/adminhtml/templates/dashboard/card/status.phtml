@@ -32,6 +32,35 @@ $hasState = $state->getState() !== null;
                 <?php endif; ?>
             </div>
             <p class="focus-lic__hero-desc"><?= $escaper->escapeHtml($state->getStatusDescription()) ?></p>
+
+            <?php
+            // Renewal and support are only offered where they are the answer,
+            // and only once a destination has been configured — never a dead link.
+            $needsHelp = in_array($state->getStatus(), [
+                \Focus\Licensing\ViewModel\Dashboard\LicenseState::STATUS_EXPIRING,
+                \Focus\Licensing\ViewModel\Dashboard\LicenseState::STATUS_EXPIRED,
+                \Focus\Licensing\ViewModel\Dashboard\LicenseState::STATUS_SUSPENDED,
+                \Focus\Licensing\ViewModel\Dashboard\LicenseState::STATUS_INVALID,
+                \Focus\Licensing\ViewModel\Dashboard\LicenseState::STATUS_VALIDATION_REQUIRED,
+            ], true);
+            $renewalUrl = $state->getRenewalUrl();
+            $supportMailto = $state->getSupportMailto();
+            ?>
+            <?php if ($needsHelp && ($renewalUrl !== '' || $supportMailto !== '')): ?>
+                <div class="focus-lic__hero-actions">
+                    <?php if ($renewalUrl !== ''): ?>
+                        <a class="focus-lic__btn focus-lic__btn--primary"
+                           href="<?= $escaper->escapeUrl($renewalUrl) ?>" target="_blank" rel="noopener noreferrer">
+                            <?= $escaper->escapeHtml(__('Renew License')) ?>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($supportMailto !== ''): ?>
+                        <a class="focus-lic__btn" href="<?= $escaper->escapeUrl($supportMailto) ?>">
+                            <?= $escaper->escapeHtml(__('Contact Support')) ?>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
         </div>
 
         <?php if ($hasState && $state->getExpiresAt() !== null): ?>
