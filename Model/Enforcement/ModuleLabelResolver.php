@@ -48,6 +48,18 @@ class ModuleLabelResolver
         'and'  => '&',
     ];
 
+    /**
+     * Phrase-level corrections applied after the split, for product names the
+     * word-by-word pass cannot reach. Only reachable via the derived path —
+     * a declared label is always taken verbatim.
+     */
+    private const PHRASE_REWRITES = [
+        'K System'  => 'K-System',
+        'Trust Pilot' => 'Trustpilot',
+        'Add ons'   => 'Add-ons',
+        'Addon'     => 'Add-ons',
+    ];
+
     /** @var array<string, string> */
     private array $memo = [];
 
@@ -107,6 +119,14 @@ class ModuleLabelResolver
             preg_split('/\s+/', trim($spaced)) ?: []
         );
 
-        return $words === [] ? $moduleName : implode(' ', $words);
+        if ($words === []) {
+            return $moduleName;
+        }
+
+        return str_replace(
+            array_keys(self::PHRASE_REWRITES),
+            array_values(self::PHRASE_REWRITES),
+            implode(' ', $words)
+        );
     }
 }
