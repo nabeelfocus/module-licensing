@@ -9,9 +9,8 @@ declare(strict_types=1);
 
 namespace Focus\Licensing\Model;
 
+use Focus\Licensing\Logger\Logger;
 use Magento\Framework\FlagManager;
-use Magento\Framework\Stdlib\DateTime\DateTime;
-use Psr\Log\LoggerInterface;
 
 /**
  * A short, customer-facing history of licence checks.
@@ -41,14 +40,18 @@ class ActivityLog
     private const FLAG_CODE = 'focus_licensing_activity_global';
 
     /**
+     * Deliberately depends on nothing beyond the flag store and the module's
+     * own logger. Magento's DateTime service pulls in Timezone -> StoreManager
+     * -> EventManager, and EventManager is itself intercepted by the licensing
+     * observer guard — injecting it here closes a circular dependency back
+     * onto LicenseGuard. gmdate() gives the same UTC string with no graph.
+     *
      * @param FlagManager $flagManager
-     * @param DateTime $dateTime
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
     public function __construct(
         private readonly FlagManager $flagManager,
-        private readonly DateTime $dateTime,
-        private readonly LoggerInterface $logger
+        private readonly Logger $logger
     ) {}
 
     /**
@@ -77,7 +80,7 @@ class ActivityLog
             $entries = $this->getEntries();
 
             array_unshift($entries, [
-                'at'            => $this->dateTime->gmtDate('Y-m-d H:i:s'),
+                'at'            => gmdate('Y-m-d H:i:s'),
                 'source'        => $source,
                 'code'          => $code !== '' ? $code : 'OK',
                 'success'       => $success,
