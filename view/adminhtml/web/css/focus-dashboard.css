@@ -6,6 +6,19 @@
 .focus-lic { margin: 0 0 30px; display: flex; flex-direction: column; gap: 16px; }
 .focus-lic * { box-sizing: border-box; }
 
+/*
+ * The system-configuration page is itself an .accordion, and Magento collapses
+ * config groups with `.accordion dd { display: none }`. Our cards use dl/dt/dd
+ * for real content inside that page, so every value — licence key, revision,
+ * domain, diagnostics — inherited that rule and rendered invisible while the
+ * dt labels stayed. Restore it explicitly.
+ *
+ * Scoped through .focus-lic so specificity (0,2,1) beats Magento's (0,1,1)
+ * regardless of stylesheet order.
+ */
+.focus-lic .focus-lic__facts dd,
+.focus-lic .focus-lic__kv dd { display: block; }
+
 /* ── Toolbar ── */
 .focus-lic__toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
 .focus-lic__toolbar-title { display: flex; align-items: center; gap: 10px; font-size: 2rem; color: #41362f; }
