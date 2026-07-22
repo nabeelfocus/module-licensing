@@ -43,12 +43,15 @@ interface LicenseGuardInterface
      * Optionally accepts a license key to use instead of the configured one (used during "Save and Verify" actions).
      *
      * @param string|null $licenseKey
-     * @param string $source Why the check ran, for the activity history —
-     *                       one of Focus\Licensing\Model\ActivityLog::SOURCE_*
+     * @param string|null $source Why the check ran, for the activity history —
+     *                       one of Focus\Licensing\Model\ActivityLog::SOURCE_*.
+     *                       Pass null for a silent refresh that records nothing,
+     *                       used when the caller has already written a more
+     *                       meaningful entry of its own.
      * @return bool
      */
     public function forceRevalidate(
         ?string $licenseKey = null,
-        string $source = ActivityLog::SOURCE_SCHEDULED
+        ?string $source = ActivityLog::SOURCE_SCHEDULED
     ): bool;
 }

@@ -186,7 +186,9 @@ class DashboardActions
         );
 
         // Refresh so the domains card reflects the freed slot immediately.
-        $this->guard->forceRevalidate(null, ActivityLog::SOURCE_RELEASE);
+        // Silent: the release above is already the meaningful history entry,
+        // and this refresh would otherwise add a redundant "No change." row.
+        $this->guard->forceRevalidate(null, null);
 
         return ['success' => true, 'message' => (string) __('%1 has been released. Its production slot is now free.', $domain)];
     }

@@ -74,7 +74,7 @@ class LicenseGuard implements LicenseGuardInterface
      */
     public function forceRevalidate(
         ?string $licenseKey = null,
-        string $source = ActivityLog::SOURCE_SCHEDULED
+        ?string $source = ActivityLog::SOURCE_SCHEDULED
     ): bool {
         $licenseKey = $licenseKey ?: $this->config->getGlobalLicenseKey();
         if (empty($licenseKey)) {
@@ -93,16 +93,18 @@ class LicenseGuard implements LicenseGuardInterface
 
         if ($response === null) {
             $this->logger->warning('Focus_Licensing: server unreachable during forceRevalidate');
-            $this->activityLog->record(
-                $source,
-                'UNREACHABLE',
-                false,
-                (int) ($previousState['license_revision'] ?? 0),
-                count($previousState['allowed_modules'] ?? []),
-                $hasState
-                    ? (string) __('Server unreachable — existing licence kept.')
-                    : (string) __('Server unreachable.')
-            );
+            if ($source !== null) {
+                $this->activityLog->record(
+                    $source,
+                    'UNREACHABLE',
+                    false,
+                    (int) ($previousState['license_revision'] ?? 0),
+                    count($previousState['allowed_modules'] ?? []),
+                    $hasState
+                        ? (string) __('Server unreachable — existing licence kept.')
+                        : (string) __('Server unreachable.')
+                );
+            }
 
             return false;
         }
@@ -118,14 +120,16 @@ class LicenseGuard implements LicenseGuardInterface
             $this->logger->warning('Focus_Licensing: transient server response during forceRevalidate', [
                 'code' => $response['code'] ?? '',
             ]);
-            $this->activityLog->record(
-                $source,
-                (string) ($response['code'] ?? ''),
-                false,
-                (int) ($previousState['license_revision'] ?? 0),
-                count($previousState['allowed_modules'] ?? []),
-                (string) __('Transient server response — existing licence kept, will retry.')
-            );
+            if ($source !== null) {
+                $this->activityLog->record(
+                    $source,
+                    (string) ($response['code'] ?? ''),
+                    false,
+                    (int) ($previousState['license_revision'] ?? 0),
+                    count($previousState['allowed_modules'] ?? []),
+                    (string) __('Transient server response — existing licence kept, will retry.')
+                );
+            }
 
             return false;
         }
@@ -142,14 +146,16 @@ class LicenseGuard implements LicenseGuardInterface
             ]);
         }
 
-        $this->activityLog->record(
-            $source,
-            (string) ($response['code'] ?? ''),
-            $isValid,
-            $newRevision,
-            count($response['allowed_modules'] ?? []),
-            $this->describeChange($previousState, $response)
-        );
+        if ($source !== null) {
+            $this->activityLog->record(
+                $source,
+                (string) ($response['code'] ?? ''),
+                $isValid,
+                $newRevision,
+                count($response['allowed_modules'] ?? []),
+                $this->describeChange($previousState, $response)
+            );
+        }
 
         $this->cacheManager->write($response);
 
