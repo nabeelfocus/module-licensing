@@ -13,12 +13,16 @@ $activity = $block->getData('activity');
 $rows = $activity->getRows();
 ?>
 <?php if (!empty($rows)): ?>
-<div class="focus-lic__card focus-lic__card--wide">
+<div class="focus-lic__card focus-lic__card--wide" data-card="activity">
     <div class="focus-lic__card-head">
         <h3><?= $escaper->escapeHtml(__('Recent License Activity')) ?></h3>
-        <span class="focus-lic__muted"><?= $escaper->escapeHtml(__('Last %1 checks on this store', (string) count($rows))) ?></span>
+        <div class="focus-lic__card-head-actions">
+            <span class="focus-lic__muted"><?= $escaper->escapeHtml(__('Last %1 checks on this store', (string) count($rows))) ?></span>
+            <button type="button" class="focus-lic__collapse-toggle" data-role="focus-lic-collapse-toggle"
+                    aria-expanded="true" aria-label="<?= $escaper->escapeHtmlAttr(__('Collapse')) ?>"></button>
+        </div>
     </div>
-    <div class="focus-lic__table-wrap">
+    <div class="focus-lic__table-wrap" data-role="focus-lic-collapsible">
         <table class="focus-lic__table">
             <thead>
                 <tr>

@@ -142,5 +142,59 @@ define([
                 domain: $btn.data('domain')
             });
         });
+
+        /**
+         * Collapse/expand for every card that opts in via a
+         * [data-role="focus-lic-collapse-toggle"] button in its head. The card
+         * declares which panel that button controls with a sibling
+         * [data-role="focus-lic-collapsible"] element — no per-card JS needed.
+         *
+         * State persists per card (keyed by its data-card attribute) in
+         * localStorage, and is re-applied here on every init — including after
+         * an action button swaps in fresh dashboard HTML — so a collapsed card
+         * stays collapsed across both page reloads and AJAX refreshes.
+         */
+        var STORAGE_PREFIX = 'focus_lic_collapsed_';
+
+        function setExpanded($card, $toggle, $panel, expanded) {
+            $panel.attr('hidden', expanded ? null : 'hidden');
+            $toggle.attr('aria-expanded', expanded ? 'true' : 'false');
+        }
+
+        $root.find('[data-card]').each(function () {
+            var $card = $(this),
+                cardId = $card.data('card'),
+                $toggle = $card.find('[data-role="focus-lic-collapse-toggle"]').first(),
+                $panel = $card.find('[data-role="focus-lic-collapsible"]').first(),
+                collapsed;
+
+            if (!$toggle.length || !$panel.length) {
+                return;
+            }
+
+            try {
+                collapsed = window.localStorage.getItem(STORAGE_PREFIX + cardId) === '1';
+            } catch (e) {
+                collapsed = false;
+            }
+            setExpanded($card, $toggle, $panel, !collapsed);
+        });
+
+        $root.on('click', '[data-role="focus-lic-collapse-toggle"]', function () {
+            var $toggle = $(this),
+                $card = $toggle.closest('[data-card]'),
+                $panel = $card.find('[data-role="focus-lic-collapsible"]').first(),
+                cardId = $card.data('card'),
+                nowExpanded = $toggle.attr('aria-expanded') !== 'true';
+
+            setExpanded($card, $toggle, $panel, nowExpanded);
+
+            try {
+                window.localStorage.setItem(STORAGE_PREFIX + cardId, nowExpanded ? '0' : '1');
+            } catch (e) {
+                // Private-browsing storage denial is not worth surfacing here —
+                // the toggle still works for the rest of this page view.
+            }
+        });
     };
 });

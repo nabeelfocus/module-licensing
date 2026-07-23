@@ -54,7 +54,6 @@ class CommercialModulesProvider extends AbstractDataProvider
                 'module_id'       => $i + 1,
                 'label'           => $row['label'],
                 'module'          => $row['module'],
-                'version'         => $row['version'],
                 'enabled'         => $row['enabled'] ? __('Yes') : __('No'),
                 'license_status'  => $row['status_label'],
                 'reason'          => $row['reason'] !== '' ? $row['reason'] : '—',

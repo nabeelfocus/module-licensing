@@ -52,6 +52,24 @@
     display: flex; justify-content: space-between; align-items: center; gap: 10px;
     padding: 1.2rem 1.8rem; border-bottom: 1px solid #e3e3e3;
 }
+.focus-lic__card-head-actions { display: flex; align-items: center; gap: 1.2rem; }
+
+/* ── Collapse/expand ── */
+.focus-lic__collapse-toggle {
+    border: 0; background: transparent; cursor: pointer; flex: none;
+    width: 2.4rem; height: 2.4rem; border-radius: 3px; padding: 0;
+    display: grid; place-items: center; color: #757069;
+}
+.focus-lic__collapse-toggle:hover { background: #f3f2f1; color: #303030; }
+.focus-lic__collapse-toggle:focus-visible { outline: 2px solid #eb5202; outline-offset: 1px; }
+.focus-lic__collapse-toggle::before {
+    content: ""; width: 0; height: 0; border-radius: 1px;
+    border-left: 5px solid transparent; border-right: 5px solid transparent;
+    border-top: 6px solid currentColor; transition: transform 0.15s ease;
+}
+.focus-lic__collapse-toggle[aria-expanded="false"]::before { transform: rotate(-90deg); }
+@media (prefers-reduced-motion: reduce) { .focus-lic__collapse-toggle::before { transition: none; } }
+
 .focus-lic__card-head h3 {
     font-size: 1.25rem; margin: 0; text-transform: uppercase; letter-spacing: 0.05em;
     color: #757069; font-weight: 600;

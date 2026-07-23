@@ -52,12 +52,6 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="version">
-            <settings>
-                <label translate="true">Installed Version</label>
-                <sortable>false</sortable>
-            </settings>
-        </column>
         <column name="enabled">
             <settings>
                 <label translate="true">Enabled</label>

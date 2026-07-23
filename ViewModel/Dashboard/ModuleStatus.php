@@ -13,8 +13,6 @@ use Focus\Licensing\Api\LicenseGuardInterface;
 use Focus\Licensing\Model\Enforcement\ModuleLabelResolver;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\Manager as ModuleManager;
-use Magento\Framework\Module\ModuleListInterface;
-use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
@@ -45,8 +43,6 @@ class ModuleStatus implements ArgumentInterface
     /**
      * @param FullModuleList $fullModuleList
      * @param ModuleManager $moduleManager
-     * @param ModuleListInterface $moduleList
-     * @param PackageInfo $packageInfo
      * @param LicenseGuardInterface $licenseGuard
      * @param LicenseState $licenseState
      * @param ModuleLabelResolver $labelResolver
@@ -54,8 +50,6 @@ class ModuleStatus implements ArgumentInterface
     public function __construct(
         private readonly FullModuleList $fullModuleList,
         private readonly ModuleManager $moduleManager,
-        private readonly ModuleListInterface $moduleList,
-        private readonly PackageInfo $packageInfo,
         private readonly LicenseGuardInterface $licenseGuard,
         private readonly LicenseState $licenseState,
         private readonly ModuleLabelResolver $labelResolver
@@ -63,7 +57,7 @@ class ModuleStatus implements ArgumentInterface
 
     /**
      * @return array<int, array{
-     *     module: string, label: string, version: string, installed: bool,
+     *     module: string, label: string, installed: bool,
      *     enabled: bool, licensed: bool, status: string, status_label: string,
      *     severity: string, reason: string, last_validation: ?string
      * }>
@@ -98,7 +92,6 @@ class ModuleStatus implements ArgumentInterface
             $rows[] = [
                 'module'          => $moduleName,
                 'label'           => $this->labelResolver->getLabel($moduleName),
-                'version'         => $this->resolveVersion($moduleName),
                 'installed'       => true,
                 'enabled'         => $enabled,
                 'licensed'        => $licensed,
@@ -225,27 +218,5 @@ class ModuleStatus implements ArgumentInterface
             LicenseState::STATUS_VALIDATION_REQUIRED => (string) __('License validation overdue (offline grace ended).'),
             default => (string) __('Not included in your license — contact Focus to add %1.', $this->labelResolver->getLabel($moduleName)),
         };
-    }
-
-    /**
-     * @param string $moduleName
-     * @return string
-     */
-    private function resolveVersion(string $moduleName): string
-    {
-        try {
-            $version = (string) $this->packageInfo->getVersion($moduleName);
-            if ($version !== '') {
-                return $version;
-            }
-        } catch (\Exception) {
-            // fall through to module.xml
-        }
-
-        $config = $this->moduleList->getOne($moduleName);
-
-        return (string) ($config['setup_version'] ?? '') !== ''
-            ? (string) $config['setup_version']
-            : '—';
     }
 }
