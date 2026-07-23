@@ -19,8 +19,10 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Config
 {
-    public const XML_PATH_SERVER_URL = 'focus_licensing/general/server_url';
-    public const XML_PATH_CACHE_TTL  = 'focus_licensing/general/cache_ttl';
+    public const XML_PATH_SERVER_URL    = 'focus_licensing/general/server_url';
+    public const XML_PATH_CACHE_TTL     = 'focus_licensing/general/cache_ttl';
+    public const XML_PATH_RENEWAL_URL   = 'focus_licensing/support/renewal_url';
+    public const XML_PATH_SUPPORT_EMAIL = 'focus_licensing/support/support_email';
 
     /** Default cache TTL: 25 hours (slightly longer than daily cron interval) */
     public const DEFAULT_CACHE_TTL = 90000;
@@ -57,6 +59,27 @@ class Config
     public function getCacheTtl(): int
     {
         return (int) ($this->scopeConfig->getValue(self::XML_PATH_CACHE_TTL, ScopeInterface::SCOPE_STORE) ?: self::DEFAULT_CACHE_TTL);
+    }
+
+    /**
+     * Where a customer renews the license. Empty when not configured, which
+     * hides the Renew License button rather than offering a dead link.
+     *
+     * @return string
+     */
+    public function getRenewalUrl(): string
+    {
+        return trim((string) $this->scopeConfig->getValue(self::XML_PATH_RENEWAL_URL, ScopeInterface::SCOPE_STORE));
+    }
+
+    /**
+     * Support address for the Contact Support button. Empty hides the button.
+     *
+     * @return string
+     */
+    public function getSupportEmail(): string
+    {
+        return trim((string) $this->scopeConfig->getValue(self::XML_PATH_SUPPORT_EMAIL, ScopeInterface::SCOPE_STORE));
     }
 
     /**

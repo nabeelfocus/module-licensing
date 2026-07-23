@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Focus\Licensing\Block\Adminhtml\Dashboard;
 
+use Focus\Licensing\ViewModel\Dashboard\Activity;
 use Focus\Licensing\ViewModel\Dashboard\DeveloperInfo;
 use Focus\Licensing\ViewModel\Dashboard\Diagnostics;
 use Focus\Licensing\ViewModel\Dashboard\Domains;
@@ -36,6 +37,7 @@ class View extends Template
      * @param Diagnostics $diagnostics
      * @param Domains $domains
      * @param DeveloperInfo $developerInfo
+     * @param Activity $activity
      * @param array $data
      */
     public function __construct(
@@ -45,6 +47,7 @@ class View extends Template
         private readonly Diagnostics $diagnostics,
         private readonly Domains $domains,
         private readonly DeveloperInfo $developerInfo,
+        private readonly Activity $activity,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -72,6 +75,7 @@ class View extends Template
         $block->setData('diagnostics', $this->diagnostics);
         $block->setData('domains', $this->domains);
         $block->setData('developer_info', $this->developerInfo);
+        $block->setData('activity', $this->activity);
 
         return $block->toHtml();
     }
@@ -86,6 +90,7 @@ class View extends Template
             'refresh'    => $this->getUrl('focus_licensing/license/refresh'),
             'deactivate' => $this->getUrl('focus_licensing/license/deactivate'),
             'test'       => $this->getUrl('focus_licensing/license/testconnection'),
+            'release'    => $this->getUrl('focus_licensing/license/releasedomain'),
         ]);
     }
 }

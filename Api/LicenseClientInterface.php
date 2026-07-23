@@ -43,9 +43,12 @@ interface LicenseClientInterface
      *
      * @param string $licenseKey
      * @param string[] $installedModules
+     * @param string|null $domain Domain to release. Defaults to this store's own
+     *                            domain; pass another of the licence's domains to
+     *                            free its slot without deactivating this store.
      * @return array|null
      */
-    public function deactivate(string $licenseKey, array $installedModules): ?array;
+    public function deactivate(string $licenseKey, array $installedModules, ?string $domain = null): ?array;
 
     /**
      * Read-only diagnostics probe for the admin "Test Connection" button.

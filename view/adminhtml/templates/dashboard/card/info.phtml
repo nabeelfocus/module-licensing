@@ -9,11 +9,13 @@
 $state = $block->getData('license_state');
 $next = $state->getNextValidationAt();
 ?>
-<div class="focus-lic__card">
+<div class="focus-lic__card" data-card="info">
     <div class="focus-lic__card-head">
         <h3><?= $escaper->escapeHtml(__('Validation Schedule')) ?></h3>
+        <button type="button" class="focus-lic__collapse-toggle" data-role="focus-lic-collapse-toggle"
+                aria-expanded="true" aria-label="<?= $escaper->escapeHtmlAttr(__('Collapse')) ?>"></button>
     </div>
-    <div class="focus-lic__card-body">
+    <div class="focus-lic__card-body" data-role="focus-lic-collapsible">
         <dl class="focus-lic__kv">
             <dt><?= $escaper->escapeHtml(__('Last Validation')) ?></dt>
             <dd><?= $escaper->escapeHtml($state->formatDate($state->getLastSyncedAt(), true)) ?></dd>

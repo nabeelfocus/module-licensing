@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Focus\Licensing\Cron;
 
+use Focus\Licensing\Model\ActivityLog;
 use Focus\Licensing\Api\LicenseGuardInterface;
 use Focus\Licensing\Logger\Logger;
 
@@ -38,7 +39,7 @@ class RevalidateLicenses
         $this->logger->info('Focus_Licensing: RevalidateLicenses cron started.');
 
         try {
-            $isValid = $this->licenseGuard->forceRevalidate();
+            $isValid = $this->licenseGuard->forceRevalidate(null, ActivityLog::SOURCE_SCHEDULED);
             
             if ($isValid) {
                 $this->logger->info('Focus_Licensing: successfully revalidated global license state.');

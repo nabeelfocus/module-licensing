@@ -1,7 +1,12 @@
 <?php
 /**
- * Registered Domains card — informational list from the latest server
- * response; the current store is tagged.
+ * Registered Domains card — the licence's domains as reported at the last
+ * synchronisation, with the slot accounting that decides what a merchant can
+ * still activate.
+ *
+ * Domains other than this store can be released from here. This store's own
+ * slot is released by the Deactivate button instead, so there is only ever one
+ * path to each outcome.
  *
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Framework\Escaper $escaper
@@ -10,15 +15,28 @@
 $domains = $block->getData('domains');
 /** @var \Focus\Licensing\ViewModel\Dashboard\LicenseState $state */
 $state = $block->getData('license_state');
+
 $rows = $domains->getRows();
+$slotsTotal = $domains->getSlotsTotal();
+$slotsUsed = $domains->getSlotsUsed();
 ?>
 <?php if (!empty($rows)): ?>
-<div class="focus-lic__card focus-lic__card--wide">
+<div class="focus-lic__card focus-lic__card--wide" data-card="domains">
     <div class="focus-lic__card-head">
         <h3><?= $escaper->escapeHtml(__('Registered Domains')) ?></h3>
-        <span class="focus-lic__muted"><?= $escaper->escapeHtml(__('As reported by the license server on the last synchronization')) ?></span>
+        <div class="focus-lic__card-head-actions">
+            <span class="focus-lic__muted">
+                <?php if ($slotsTotal > 0): ?>
+                    <b class="focus-lic__slots"><?= $escaper->escapeHtml(__('%1 of %2 production slots used', (string) $slotsUsed, (string) $slotsTotal)) ?></b>
+                <?php else: ?>
+                    <?= $escaper->escapeHtml(__('As reported by the license server on the last synchronization')) ?>
+                <?php endif; ?>
+            </span>
+            <button type="button" class="focus-lic__collapse-toggle" data-role="focus-lic-collapse-toggle"
+                    aria-expanded="true" aria-label="<?= $escaper->escapeHtmlAttr(__('Collapse')) ?>"></button>
+        </div>
     </div>
-    <div class="focus-lic__table-wrap">
+    <div class="focus-lic__table-wrap" data-role="focus-lic-collapsible">
         <table class="focus-lic__table">
             <thead>
                 <tr>
@@ -27,6 +45,7 @@ $rows = $domains->getRows();
                     <th><?= $escaper->escapeHtml(__('Activated')) ?></th>
                     <th><?= $escaper->escapeHtml(__('Last Validated')) ?></th>
                     <th><?= $escaper->escapeHtml(__('Status')) ?></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -49,6 +68,21 @@ $rows = $domains->getRows();
                             <span class="focus-lic__badge focus-lic__badge--<?= $row['status'] === 'active' ? 'ok' : 'neutral' ?>">
                                 <?= $escaper->escapeHtml($row['status'] ?: '—') ?>
                             </span>
+                        </td>
+                        <td class="focus-lic__domain-action">
+                            <?php if ($row['is_current']): ?>
+                                <span class="focus-lic__muted"><?= $escaper->escapeHtml(__('use Deactivate above')) ?></span>
+                            <?php elseif (!$row['uses_slot']): ?>
+                                <span class="focus-lic__muted"><?= $escaper->escapeHtml(__('free — no slot used')) ?></span>
+                            <?php elseif ($row['releasable']): ?>
+                                <button type="button"
+                                        class="focus-lic__btn focus-lic__btn--danger focus-lic__btn--sm"
+                                        data-role="focus-lic-release"
+                                        data-domain="<?= $escaper->escapeHtmlAttr($row['domain']) ?>"
+                                        data-confirm="<?= $escaper->escapeHtmlAttr(__('Release the production slot held by %1? That store will switch to restricted mode until it is activated again. This store is not affected.', $row['domain'])) ?>">
+                                    <?= $escaper->escapeHtml(__('Release slot')) ?>
+                                </button>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

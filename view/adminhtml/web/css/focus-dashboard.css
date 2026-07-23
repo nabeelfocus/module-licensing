@@ -6,6 +6,19 @@
 .focus-lic { margin: 0 0 30px; display: flex; flex-direction: column; gap: 16px; }
 .focus-lic * { box-sizing: border-box; }
 
+/*
+ * The system-configuration page is itself an .accordion, and Magento collapses
+ * config groups with `.accordion dd { display: none }`. Our cards use dl/dt/dd
+ * for real content inside that page, so every value — licence key, revision,
+ * domain, diagnostics — inherited that rule and rendered invisible while the
+ * dt labels stayed. Restore it explicitly.
+ *
+ * Scoped through .focus-lic so specificity (0,2,1) beats Magento's (0,1,1)
+ * regardless of stylesheet order.
+ */
+.focus-lic .focus-lic__facts dd,
+.focus-lic .focus-lic__kv dd { display: block; }
+
 /* ── Toolbar ── */
 .focus-lic__toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
 .focus-lic__toolbar-title { display: flex; align-items: center; gap: 10px; font-size: 2rem; color: #41362f; }
@@ -39,6 +52,24 @@
     display: flex; justify-content: space-between; align-items: center; gap: 10px;
     padding: 1.2rem 1.8rem; border-bottom: 1px solid #e3e3e3;
 }
+.focus-lic__card-head-actions { display: flex; align-items: center; gap: 1.2rem; }
+
+/* ── Collapse/expand ── */
+.focus-lic__collapse-toggle {
+    border: 0; background: transparent; cursor: pointer; flex: none;
+    width: 2.4rem; height: 2.4rem; border-radius: 3px; padding: 0;
+    display: grid; place-items: center; color: #757069;
+}
+.focus-lic__collapse-toggle:hover { background: #f3f2f1; color: #303030; }
+.focus-lic__collapse-toggle:focus-visible { outline: 2px solid #eb5202; outline-offset: 1px; }
+.focus-lic__collapse-toggle::before {
+    content: ""; width: 0; height: 0; border-radius: 1px;
+    border-left: 5px solid transparent; border-right: 5px solid transparent;
+    border-top: 6px solid currentColor; transition: transform 0.15s ease;
+}
+.focus-lic__collapse-toggle[aria-expanded="false"]::before { transform: rotate(-90deg); }
+@media (prefers-reduced-motion: reduce) { .focus-lic__collapse-toggle::before { transition: none; } }
+
 .focus-lic__card-head h3 {
     font-size: 1.25rem; margin: 0; text-transform: uppercase; letter-spacing: 0.05em;
     color: #757069; font-weight: 600;
@@ -174,6 +205,16 @@
 .focus-lic__step-t { font-weight: 600; font-size: 1.4rem; color: #303030; }
 .focus-lic__step-d { font-size: 1.3rem; color: #8d867e; margin-top: 2px; max-width: 76ch; }
 .focus-lic__step-actions { margin-top: 0.9rem; display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ── Renewal / support actions in the hero ── */
+.focus-lic__hero-actions { margin-top: 1rem; display: flex; gap: 8px; flex-wrap: wrap; }
+.focus-lic__hero-actions .focus-lic__btn { text-decoration: none; display: inline-block; }
+
+/* ── Domain slot management ── */
+.focus-lic__btn--sm { padding: 0.4rem 1rem; font-size: 1.2rem; }
+.focus-lic__domain-action { text-align: right; white-space: nowrap; }
+.focus-lic__domain-action .focus-lic__muted { font-size: 1.15rem; }
+.focus-lic__slots { color: #514943; font-weight: 600; }
 
 /* Busy state while an AJAX action runs */
 .focus-lic--busy { opacity: 0.6; pointer-events: none; }

@@ -9,14 +9,18 @@
 /** @var \Focus\Licensing\ViewModel\Dashboard\Diagnostics $diagnostics */
 $diagnostics = $block->getData('diagnostics');
 ?>
-<div class="focus-lic__card">
+<div class="focus-lic__card" data-card="diagnostics">
     <div class="focus-lic__card-head">
         <h3><?= $escaper->escapeHtml(__('Diagnostics')) ?></h3>
-        <button type="button" class="focus-lic__btn" data-role="focus-lic-action" data-action="test">
-            <?= $escaper->escapeHtml(__('Test Connection')) ?>
-        </button>
+        <div class="focus-lic__card-head-actions">
+            <button type="button" class="focus-lic__btn" data-role="focus-lic-action" data-action="test">
+                <?= $escaper->escapeHtml(__('Test Connection')) ?>
+            </button>
+            <button type="button" class="focus-lic__collapse-toggle" data-role="focus-lic-collapse-toggle"
+                    aria-expanded="true" aria-label="<?= $escaper->escapeHtmlAttr(__('Collapse')) ?>"></button>
+        </div>
     </div>
-    <div class="focus-lic__card-body">
+    <div class="focus-lic__card-body" data-role="focus-lic-collapsible">
         <?php foreach ($diagnostics->getGroups() as $groupLabel => $items): ?>
             <h4 class="focus-lic__diag-group"><?= $escaper->escapeHtml($groupLabel) ?></h4>
             <dl class="focus-lic__kv focus-lic__kv--tight">

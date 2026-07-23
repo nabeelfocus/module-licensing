@@ -48,6 +48,27 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
             </group>
+
+            <!--
+                Where the dashboard's "Renew License" and "Contact Support"
+                buttons point. Each button only appears once its destination is
+                set, so an unconfigured store never shows a dead link.
+            -->
+            <group id="support" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Renewal &amp; Support</label>
+
+                <field id="renewal_url" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Renewal URL</label>
+                    <comment>Page where a customer renews the license, e.g. https://www.beds.co.uk/focus/renew. Leave empty to hide the Renew License button.</comment>
+                    <validate>validate-url</validate>
+                </field>
+
+                <field id="support_email" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Support Email</label>
+                    <comment>Address the Contact Support button writes to. The message is pre-filled with the license diagnostics (key prefix, revision, domain, last result) — never the license key itself. Leave empty to hide the button.</comment>
+                    <validate>validate-email</validate>
+                </field>
+            </group>
         </section>
     </system>
 </config>
