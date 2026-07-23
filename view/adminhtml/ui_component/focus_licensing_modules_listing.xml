@@ -58,8 +58,9 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="license_status">
+        <column name="license_status" class="Focus\Licensing\Ui\Component\Listing\Column\LicenseStatusColumn">
             <settings>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
                 <label translate="true">License Status</label>
                 <sortable>false</sortable>
             </settings>

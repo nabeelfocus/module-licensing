@@ -56,6 +56,7 @@ class CommercialModulesProvider extends AbstractDataProvider
                 'module'          => $row['module'],
                 'enabled'         => $row['enabled'] ? __('Yes') : __('No'),
                 'license_status'  => $row['status_label'],
+                'severity'        => $row['severity'],
                 'reason'          => $row['reason'] !== '' ? $row['reason'] : '—',
                 'last_validation' => $row['last_validation'] !== null
                     ? $state->formatDate($row['last_validation'], true)
