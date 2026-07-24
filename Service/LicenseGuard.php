@@ -169,6 +169,15 @@ class LicenseGuard implements LicenseGuardInterface
      * Module names are reported rather than counts: "Divan Storage Add-ons
      * added" tells an admin something a revision number never could.
      *
+     * A licence's allowed_modules can gain or lose a module the store has
+     * never installed — a licence legitimately covers whatever the customer
+     * bought, whether or not they've installed it yet. That's real and
+     * correct on the SERVER side, but on THIS store's own activity history it
+     * is noise: telling an admin "Focus_PdpBestSellers added" when they don't
+     * even run that module answers a question they didn't ask. Added/removed
+     * are filtered to modules actually installed here, so this history only
+     * ever reports something the admin can see the effect of.
+     *
      * @param array|null $previous
      * @param array $response
      * @return string
@@ -183,10 +192,12 @@ class LicenseGuard implements LicenseGuardInterface
             return (string) __('Licence activated on this store.');
         }
 
+        $installed = $this->moduleDiscovery->getInstalledFocusModules();
+
         $before = $previous['allowed_modules'] ?? [];
         $after  = $response['allowed_modules'] ?? [];
-        $added   = array_values(array_diff($after, $before));
-        $removed = array_values(array_diff($before, $after));
+        $added   = array_values(array_intersect(array_diff($after, $before), $installed));
+        $removed = array_values(array_intersect(array_diff($before, $after), $installed));
 
         $parts = [];
         if ($added !== []) {
