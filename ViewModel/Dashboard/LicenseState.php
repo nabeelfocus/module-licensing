@@ -372,6 +372,16 @@ class LicenseState implements ArgumentInterface
 
     /**
      * Next scheduled run of the revalidation cron, or null when not scheduled.
+     *
+     * Only a schedule whose time is still ahead counts as "next". A row can
+     * stay marked `pending` in the database after its time has passed if
+     * Magento's own cron process isn't actually running right now (paused,
+     * a dev box with no system crontab, a deploy freeze) — nothing has come
+     * along to mark it missed. Without this guard the oldest such row would
+     * be reported as "next", which can print an upcoming time that is
+     * actually earlier than "Last Validation" above it — a real instance
+     * observed on a store where cron:run was never invoked as a live
+     * process, leaving 19 stale pending rows behind.
      */
     public function getNextValidationAt(): ?string
     {
@@ -379,6 +389,7 @@ class LicenseState implements ArgumentInterface
             $collection = $this->scheduleCollectionFactory->create();
             $collection->addFieldToFilter('job_code', 'focus_licensing_revalidate')
                 ->addFieldToFilter('status', Schedule::STATUS_PENDING)
+                ->addFieldToFilter('scheduled_at', ['gt' => gmdate('Y-m-d H:i:s')])
                 ->setOrder('scheduled_at', 'ASC')
                 ->setPageSize(1);
 
