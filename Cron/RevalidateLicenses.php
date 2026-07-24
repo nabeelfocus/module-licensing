@@ -13,13 +13,6 @@ use Focus\Licensing\Model\ActivityLog;
 use Focus\Licensing\Api\LicenseGuardInterface;
 use Focus\Licensing\Logger\Logger;
 
-/**
- * Daily revalidation cron: refresh the global license state.
- *
- * Schedule: once per day (configurable). Runs off-peak to avoid contention.
- * Offline grace logic is applied in LicenseGuard, not here. This cron's job
- * is simply to attempt a refresh and store the result.
- */
 class RevalidateLicenses
 {
     /**

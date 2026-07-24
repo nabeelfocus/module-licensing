@@ -11,10 +11,6 @@ namespace Focus\Licensing\Model\System\Message;
 
 use Focus\Licensing\ViewModel\Dashboard\LicenseState;
 
-/**
- * The server has been unreachable for a while and the offline grace window is
- * nearly used up — modules restrict when it runs out.
- */
 class OfflineGraceEnding extends AbstractLicenseMessage
 {
     public const IDENTITY = 'focus_licensing_grace_ending';

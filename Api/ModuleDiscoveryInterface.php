@@ -9,9 +9,6 @@ declare(strict_types=1);
 
 namespace Focus\Licensing\Api;
 
-/**
- * Discovers all installed Focus commercial modules dynamically.
- */
 interface ModuleDiscoveryInterface
 {
     /**

@@ -13,17 +13,6 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 
-/**
- * Renders the Commercial Modules grid's License Status as a colour badge:
- * green = active, red = restricted (running but not covered by the licence —
- * the actual problem this dashboard exists to surface), grey = disabled (not
- * running, so not a licensing issue). Reuses the same severity ModuleStatus
- * already computes for the dashboard card, so the colour is consistent
- * everywhere this status appears.
- *
- * Requires <bodyTmpl>ui/grid/cells/html</bodyTmpl> on the column in the
- * listing XML, matching the Focus_LicenseServer result-code column pattern.
- */
 class LicenseStatusColumn extends Column
 {
     /**

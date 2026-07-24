@@ -9,18 +9,6 @@ declare(strict_types=1);
 
 namespace Focus\Licensing\Model\Enforcement;
 
-/**
- * Resolves the owning Focus module name from a fully-qualified class name,
- * following Magento's PSR-4 convention (Vendor\Module\... → Vendor_Module).
- *
- * Handles generated interceptors (…\Interceptor) and factories/proxies
- * (…\Proxy) by stripping the generated suffix first. Results are memoized —
- * this runs on every controller / observer dispatch, so it must be cheap.
- *
- * Deliberately only concerns itself with the Focus vendor: any non-Focus class
- * returns null immediately, keeping the enforcement hot path free for the
- * thousands of core/third-party classes on the store.
- */
 class ModuleNameResolver
 {
     private const VENDOR = 'Focus';

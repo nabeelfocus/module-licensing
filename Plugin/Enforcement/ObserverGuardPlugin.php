@@ -14,14 +14,6 @@ use Focus\Licensing\Model\Enforcement\EnforcementGuard;
 use Magento\Framework\Event\Invoker\InvokerDefault;
 use Magento\Framework\Event\Observer;
 
-/**
- * Observer guard — silently skips observers that belong to a guarded, unlicensed
- * module. Intercepts the framework observer invoker, so it covers every event
- * observer on the store with one plugin.
- *
- * Runs on every observer dispatch, so it must stay cheap: the resolver's fast
- * path returns immediately for any non-Focus observer (virtually all of them).
- */
 class ObserverGuardPlugin
 {
     /**

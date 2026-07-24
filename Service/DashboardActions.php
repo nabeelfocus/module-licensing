@@ -16,17 +16,6 @@ use Focus\Licensing\Model\ActivityLog;
 use Focus\Licensing\Model\Config;
 use Focus\Licensing\Model\LicenseCacheManager;
 
-/**
- * Orchestrates the dashboard action buttons. Thin wrapper over existing
- * services — no licensing decisions live here.
- *
- *   validateNow() — force a server round-trip, refresh the cache
- *   refresh()     — drop the cache and re-bootstrap via activate (full
- *                   signed payload + fresh HMAC secret)
- *   deactivate()  — release this store's domain slot and clear local state
- *   releaseDomain() — release a DIFFERENT domain's slot, leaving this store
- *                   running (server migrations, rebuilt staging)
- */
 class DashboardActions
 {
     /**
@@ -130,15 +119,8 @@ class DashboardActions
     }
 
     /**
-     * Release the slot held by another domain on this same licence.
-     *
-     * The licence server's deactivate endpoint already accepts an arbitrary
-     * domain and is authenticated with this licence's own HMAC secret, so the
-     * caller can only ever release a domain belonging to the licence it holds.
-     * No new endpoint and no new trust are involved.
-     *
-     * The local cache is deliberately NOT cleared: this store keeps running.
-     * That is the whole difference from deactivate().
+     * Release the slot held by another domain on this same licence. Unlike
+     * deactivate(), the local cache is NOT cleared — this store keeps running.
      *
      * @param string $domain Domain to release, as shown in the domains card
      * @return array{success: bool, message: string}

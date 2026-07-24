@@ -12,13 +12,6 @@ namespace Focus\Licensing\ViewModel\Dashboard;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-/**
- * Developer-mode-only diagnostics: the raw signed payload and verification
- * metadata. Hidden entirely in production/default mode.
- *
- * Secrets are ALWAYS redacted — the cached payload carries the per-license
- * HMAC secret, which must never reach a screen.
- */
 class DeveloperInfo implements ArgumentInterface
 {
     private const REDACTED_KEYS = ['secret'];

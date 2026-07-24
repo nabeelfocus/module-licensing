@@ -14,11 +14,6 @@ use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\Config\Reader\Filesystem;
 use Magento\Framework\Config\ValidationStateInterface;
 
-/**
- * Reads and merges every module's etc/focus_licensing.xml into one config set.
- * Standard Magento filesystem reader — merging, caching and validation are
- * handled by the framework.
- */
 class Reader extends Filesystem implements ReaderInterface
 {
     /**

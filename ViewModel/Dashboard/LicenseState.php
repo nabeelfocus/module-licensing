@@ -17,14 +17,6 @@ use Magento\Cron\Model\Schedule;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-/**
- * Presentation-side interpretation of the cached signed license state.
- *
- * Read-only: everything here derives from LicenseCacheManager::read() (which
- * verifies the Ed25519 signature) plus configuration. No licensing decision
- * is made here — LicenseGuard remains the only authority. This class only
- * translates state into what the dashboard displays.
- */
 class LicenseState implements ArgumentInterface
 {
     public const STATUS_NOT_CONFIGURED = 'not_configured';
@@ -114,7 +106,6 @@ class LicenseState implements ArgumentInterface
             };
         }
 
-        // Signed state says active — apply presentation-level freshness checks
         $days = $this->getDaysRemaining();
         if ($days !== null && $days <= 0) {
             return self::STATUS_EXPIRED;

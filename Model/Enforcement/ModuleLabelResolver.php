@@ -11,22 +11,6 @@ namespace Focus\Licensing\Model\Enforcement;
 
 use Focus\Licensing\Api\ProtectedModuleRegistryInterface;
 
-/**
- * Turns a Magento module identifier into something a merchant can read.
- *
- * Two sources, in order:
- *
- *   1. The `label` attribute on the module's own etc/focus_licensing.xml
- *      declaration. This is the authoritative name and the one to curate —
- *      "Focus_StorageAddons" is sold as "Divan Storage Add-ons", which no
- *      amount of string splitting could produce.
- *   2. Otherwise a derived name: strip the vendor prefix, split the CamelCase
- *      and restore the acronyms that a naive split mangles ("Pdp" → "PDP").
- *
- * The derived form exists so a module that has not been given a label — a new
- * one, or a customer's own — still reads acceptably instead of showing a raw
- * class-style identifier.
- */
 class ModuleLabelResolver
 {
     /**

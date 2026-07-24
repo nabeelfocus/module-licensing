@@ -16,10 +16,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 
-/**
- * "Test Connection": read-only diagnostics probe. Returns per-step checks;
- * never modifies license state on either side.
- */
 class TestConnection extends Action implements HttpPostActionInterface
 {
     public const ADMIN_RESOURCE = 'Focus_Licensing::config';

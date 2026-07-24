@@ -13,23 +13,6 @@ use Focus\Licensing\Api\LicenseGuardInterface;
 use Focus\Licensing\Api\ProtectedModuleRegistryInterface;
 use Focus\Licensing\Logger\Logger;
 
-/**
- * The single decision the whole enforcement layer asks: "does this class belong
- * to a guarded module that is currently NOT licensed — and therefore must be
- * blocked?"
- *
- * Every guard plugin (controller, CLI, observer, Web API, menu) calls
- * getBlockedModuleForClass() and acts on the result. Centralizing the decision
- * here means the fail-open safety rules and the per-request memoization exist
- * in exactly one place.
- *
- * Safety contract (never violate — this runs site-wide):
- *   - non-Focus class → null (allow; the overwhelmingly common case)
- *   - Focus class, not guarded → null (allow)
- *   - guarded and licensed → null (allow)
- *   - guarded and unlicensed → module name (BLOCK)
- *   - any internal error → null (FAIL OPEN; logged)
- */
 class EnforcementGuard
 {
     /** @var array<string, string|null> memoized className → blocked module|null */
