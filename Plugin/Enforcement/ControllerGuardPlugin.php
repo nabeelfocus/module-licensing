@@ -18,19 +18,6 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\UrlInterface;
 
-/**
- * Controller guard — the routing enforcement point.
- *
- * Runs on every controller's execute(). If the controller belongs to a guarded
- * module that is currently unlicensed, its execution is replaced with a safe
- * redirect (admin → dashboard + notice; frontend → home). Everything else —
- * the overwhelming majority of requests — passes straight through after a
- * single inexpensive namespace check.
- *
- * Note: this protects a Focus module's OWN controllers/routes. Rendering that a
- * commercial module injects into a CORE page (e.g., a PDP block) is guarded at
- * the block level by that module's own isLicensed() check, not here.
- */
 class ControllerGuardPlugin
 {
     /**

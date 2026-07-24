@@ -15,14 +15,6 @@ use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
 
-/**
- * Web API (REST) guard — after the router matches a request to a service class,
- * this checks whether that class belongs to a guarded, unlicensed module and,
- * if so, throws a 403 so the caller gets a clean JSON error instead of the
- * commercial endpoint running.
- *
- * Registered in etc/webapi_rest/di.xml, so it only loads on the REST area.
- */
 class WebapiRouterGuardPlugin
 {
     /**

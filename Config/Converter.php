@@ -11,16 +11,6 @@ namespace Focus\Licensing\Config;
 
 use Magento\Framework\Config\ConverterInterface;
 
-/**
- * Converts the merged focus_licensing.xml DOM into a keyed array:
- *
- *   [
- *     'Focus_StorageAddons' => ['name' => 'Focus_StorageAddons', 'label' => 'Storage Addons', 'enabled' => true],
- *     ...
- *   ]
- *
- * A module with enabled="false" is treated as not guarded (an explicit opt-out).
- */
 class Converter implements ConverterInterface
 {
     /**

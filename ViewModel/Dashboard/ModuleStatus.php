@@ -15,18 +15,6 @@ use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-/**
- * Discovers every installed commercial Focus module and combines four
- * independent facts per module for display:
- *
- *   installed — present in config.php (FullModuleList)
- *   enabled   — enabled flag in config.php (Module Manager)
- *   licensed  — LicenseGuard verdict (the only licensing authority)
- *   status    — derived label: Active / Restricted / Disabled
- *
- * Purely presentational; consumed by the dashboard card and the
- * Commercial Modules grid.
- */
 class ModuleStatus implements ArgumentInterface
 {
     public const STATUS_ACTIVE     = 'active';

@@ -11,10 +11,6 @@ namespace Focus\Licensing\Model\System\Message;
 
 use Focus\Licensing\ViewModel\Dashboard\LicenseState;
 
-/**
- * Daily validation hasn't succeeded for several days (cron down or server
- * unreachable) but plenty of grace remains — early warning, not critical yet.
- */
 class ValidationStale extends AbstractLicenseMessage
 {
     public const IDENTITY = 'focus_licensing_validation_stale';

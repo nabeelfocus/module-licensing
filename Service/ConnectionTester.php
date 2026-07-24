@@ -13,13 +13,6 @@ use Focus\Licensing\Api\LicenseClientInterface;
 use Focus\Licensing\Api\ModuleDiscoveryInterface;
 use Focus\Licensing\Model\Config;
 
-/**
- * "Test Connection" diagnostics: connection → REST API → authentication →
- * signature verification, each reported as its own pass/fail check.
- *
- * Strictly read-only: the local cache is never touched and the server logs
- * the probe under action=test_connection without stamping validation state.
- */
 class ConnectionTester
 {
     /**

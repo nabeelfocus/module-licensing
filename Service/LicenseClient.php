@@ -16,22 +16,6 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Focus\Licensing\Logger\Logger;
 
-/**
- * HTTP client that communicates with the Focus_LicenseServer REST API.
- *
- * Rules:
- *   - All exceptions caught internally — network failure is not an error
- *   - Connect timeout: 2s, total timeout: 5s
- *   - Never called from web request paths — only from cron and admin actions
- *   - Returns null on any failure so the guard can apply grace logic
- *
- * Request signing: validate/deactivate are HMAC-signed with the per-license
- * secret issued at activation (stored inside the encrypted state cache).
- * activate() is the bootstrap call and is authenticated by key possession only.
- *
- * Signature contract (mirrors the server's HmacAuthenticator):
- *   X-Focus-Signature = HMAC-SHA256(secret, "METHOD|action|timestamp|nonce|sha256(body)")
- */
 class LicenseClient implements LicenseClientInterface
 {
     private const CONNECT_TIMEOUT = 2;

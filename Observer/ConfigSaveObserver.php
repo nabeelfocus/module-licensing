@@ -15,9 +15,6 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Message\ManagerInterface;
 
-/**
- * Validates the global license immediately after the Focus Licensing config section is saved.
- */
 class ConfigSaveObserver implements ObserverInterface
 {
     /**

@@ -9,14 +9,6 @@ declare(strict_types=1);
 
 namespace Focus\Licensing\Api;
 
-/**
- * The set of commercial Focus modules that have opted into license enforcement
- * via etc/focus_licensing.xml.
- *
- * This is only the "which modules are guarded" list. Whether a guarded module
- * is *licensed* is decided elsewhere, by LicenseGuardInterface against the
- * signed allowed_modules payload.
- */
 interface ProtectedModuleRegistryInterface
 {
     /**

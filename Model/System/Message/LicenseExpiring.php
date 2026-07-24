@@ -11,9 +11,6 @@ namespace Focus\Licensing\Model\System\Message;
 
 use Focus\Licensing\ViewModel\Dashboard\LicenseState;
 
-/**
- * "License expires in N days" — shown inside the 30-day renewal window.
- */
 class LicenseExpiring extends AbstractLicenseMessage
 {
     public const IDENTITY = 'focus_licensing_expiring';

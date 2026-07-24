@@ -18,14 +18,6 @@ use Focus\Licensing\ViewModel\Dashboard\ModuleStatus;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 
-/**
- * Root block of the licensing dashboard (rendered at the top of the
- * Stores > Configuration > Focus > Licensing section, and re-rendered by the
- * AJAX action controllers so the page never needs a manual reload).
- *
- * Cards live in their own templates under dashboard/card/ and are rendered
- * through renderCard() so each card stays independently replaceable.
- */
 class View extends Template
 {
     protected $_template = 'Focus_Licensing::dashboard/main.phtml';

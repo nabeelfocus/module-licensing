@@ -9,16 +9,6 @@ declare(strict_types=1);
 
 namespace Focus\Licensing\Model;
 
-/**
- * Ed25519 public keys of the Focus license server, embedded in code on purpose:
- * a key living in config or the database could be swapped by anyone with store
- * access, which would defeat response verification entirely. Changing the key
- * must require changing the module code.
- *
- * Rotation: generate a new pair on the server (focus:license:generate-keys),
- * add the new key_id here while KEEPING the old one, ship the client, then
- * switch the server to sign with the new key. Remove the old entry a release later.
- */
 class ServerKeyring
 {
     /**

@@ -18,11 +18,6 @@ use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\View\LayoutFactory;
 
-/**
- * Base for the dashboard AJAX actions. Each action runs its operation and
- * returns {success, message, html} — html being the freshly re-rendered
- * dashboard, so the page updates without a reload.
- */
 abstract class AbstractDashboardAction extends Action implements HttpPostActionInterface
 {
     public const ADMIN_RESOURCE = 'Focus_Licensing::config';

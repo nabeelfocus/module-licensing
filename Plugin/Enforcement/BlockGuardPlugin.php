@@ -13,23 +13,6 @@ use Focus\Licensing\Model\Enforcement\EnforcementGuard;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
 
-/**
- * Block guard — the rendering enforcement point.
- *
- * A commercial module usually injects its feature into a CORE page (a PDP, a
- * category page) by adding its own block via layout XML. Those renders are NOT
- * covered by the controller guard, because the owning controller is Magento's,
- * not the module's. This plugin closes that gap centrally: any block class
- * belonging to a guarded, unlicensed module renders as an empty string, so the
- * feature simply disappears while the host page stays completely intact.
- *
- * This is the single most important guard for "block-only" modules and removes
- * the need for a per-block hard check in every commercial module.
- *
- * Performance: toHtml() runs for every block on every page, so the hot path is
- * just the resolver's fast namespace check (non-Focus → immediate proceed),
- * memoized per request.
- */
 class BlockGuardPlugin
 {
     /**

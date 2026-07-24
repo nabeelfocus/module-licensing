@@ -12,21 +12,6 @@ namespace Focus\Licensing\Model;
 use Focus\Licensing\Logger\Logger;
 use Magento\Framework\FlagManager;
 
-/**
- * A short, customer-facing history of licence checks.
- *
- * The licence server keeps the authoritative audit trail for 180 days, but the
- * customer never sees it — from their side a licence problem is invisible until
- * a module stops working. This records the last few checks locally so the
- * dashboard can show what happened and when.
- *
- * Stored in the `flag` table rather than the cache, for the same reason the
- * signed licence state is: a cache flush must not erase the evidence an admin
- * is about to read. It is a rolling list, so it cannot grow without bound and
- * needs no schema, no table and no cleanup cron.
- *
- * Purely informational. Nothing here influences a licensing decision.
- */
 class ActivityLog
 {
     public const SOURCE_SCHEDULED   = 'scheduled';
@@ -40,11 +25,9 @@ class ActivityLog
     private const FLAG_CODE = 'focus_licensing_activity_global';
 
     /**
-     * Deliberately depends on nothing beyond the flag store and the module's
-     * own logger. Magento's DateTime service pulls in Timezone -> StoreManager
-     * -> EventManager, and EventManager is itself intercepted by the licensing
-     * observer guard — injecting it here closes a circular dependency back
-     * onto LicenseGuard. gmdate() gives the same UTC string with no graph.
+     * Do not inject Magento's DateTime service here: it pulls in EventManager,
+     * which the licensing observer guard intercepts, closing a circular
+     * dependency back onto LicenseGuard. gmdate() avoids it.
      *
      * @param FlagManager $flagManager
      * @param Logger $logger

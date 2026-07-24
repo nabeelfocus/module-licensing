@@ -11,12 +11,6 @@ namespace Focus\Licensing\ViewModel\Dashboard;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-/**
- * Registered Domains card. Rows come from the informational (unsigned)
- * `domains` list in the latest server response — display only, never used
- * for licensing decisions. Falls back to the current store's own domain
- * when the server payload predates the domains field.
- */
 class Domains implements ArgumentInterface
 {
     /**
@@ -84,11 +78,8 @@ class Domains implements ArgumentInterface
     }
 
     /**
-     * Whether a domain of this type consumes one of the licence's paid slots.
-     *
-     * Mirrors the server's rule (production and public IP only). Local and
-     * staging copies are free — a genuine benefit of the licence design that
-     * the merchant otherwise has no way to discover.
+     * Whether a domain of this type consumes a paid slot — production and
+     * public IP only, mirroring the server's rule. Local/staging are free.
      *
      * @param string $type
      * @return bool

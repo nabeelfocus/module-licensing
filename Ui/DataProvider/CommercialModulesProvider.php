@@ -13,12 +13,6 @@ use Focus\Licensing\ViewModel\Dashboard\ModuleStatus;
 use Magento\Framework\Api\Filter;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
-/**
- * Array-backed provider for the Commercial Modules listing.
- *
- * Rows come from live module discovery + the license guard — there is no
- * database table behind this grid, so collection-based operations are no-ops.
- */
 class CommercialModulesProvider extends AbstractDataProvider
 {
     /**

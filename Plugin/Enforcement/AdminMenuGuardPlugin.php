@@ -15,15 +15,6 @@ use Magento\Backend\Model\Menu;
 use Magento\Backend\Model\Menu\Config;
 use Magento\Backend\Model\Menu\Item;
 
-/**
- * Admin menu guard — hides admin menu items owned by guarded, unlicensed
- * modules. The controller guard already blocks the underlying routes; hiding
- * the menu entry removes the dead link so the admin never sees an option that
- * only leads to a "not licensed" redirect.
- *
- * Menu item ids follow the Vendor_Module::resource convention, so the owning
- * module is the segment before ":."
- */
 class AdminMenuGuardPlugin
 {
     /**

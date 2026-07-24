@@ -13,10 +13,6 @@ use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Focus > Commercial Modules — customer overview of every commercial
- * Focus extension and its license verdict.
- */
 class Index extends Action implements HttpGetActionInterface
 {
     public const ADMIN_RESOURCE = 'Focus_Licensing::modules';

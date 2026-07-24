@@ -12,12 +12,6 @@ namespace Focus\Licensing\Service;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Detects and normalises the current store's domain from its secure base URL.
- *
- * The normalisation algorithm is identical to DomainNormalizerService in
- * Focus_LicenseServer — both sides must produce the same output for the same input.
- */
 class DomainDetectorService
 {
     /**

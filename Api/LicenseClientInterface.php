@@ -9,15 +9,6 @@ declare(strict_types=1);
 
 namespace Focus\Licensing\Api;
 
-/**
- * HTTP client for communicating with Focus_LicenseServer REST API.
- *
- * All methods catch all exceptions — network failure is a normal operating
- * state, not an error. Returns null on any communication failure.
- * The caller (LicenseGuard) applies offline grace rules.
- *
- * Timeouts: 2s connect / 5s total (never adds latency to web requests).
- */
 interface LicenseClientInterface
 {
     /**

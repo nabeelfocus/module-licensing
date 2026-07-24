@@ -14,29 +14,6 @@ use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\FlagManager;
 use Focus\Licensing\Logger\Logger;
 
-/**
- * Persists and retrieves the license state response for each module.
- *
- * Storage: the framework `flag` table via FlagManager (one flag per module,
- * payload encrypted at rest with the store's crypt key).
- *
- * Why FlagManager and not core_config_data: values read through ScopeConfig
- * are served from the config cache, and WriterInterface::save() does NOT
- * invalidate that cache — so the daily cron would write fresh state while
- * the guard kept reading a stale copy until someone flushed caches, and a
- * perfectly valid license could go "restricted" once the offline grace ran
- * out. Flags are plain DB reads: no cache layer, no invalidation problem,
- * and they survive cache flushes for free.
- *
- * Security: the entire signed JSON payload from the server is stored verbatim
- * and its Ed25519 signature is verified on EVERY read against the public key
- * bundled in ServerKeyring. Tampering with the flag row (or feeding the client
- * a spoofed server response) downgrades to "no state" — module restricted.
- *
- * The per-license HMAC secret arrives only in activation responses; write()
- * carries it forward into subsequent validate-state writes so the client
- * never loses its request-signing credential on a routine refresh.
- */
 class LicenseCacheManager
 {
     private const FLAG_PREFIX = 'focus_licensing_state_';

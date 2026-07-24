@@ -13,32 +13,6 @@ use Focus\Licensing\Api\ProtectedModuleRegistryInterface;
 use Focus\Licensing\Model\LicenseCacheManager;
 use Magento\Framework\Config\DataInterface;
 
-/**
- * Decides which modules the enforcement layer guards.
- *
- * Three sources, in descending order of trust:
- *
- *   1. The SIGNED server payload (`protected_modules`). Authoritative and
- *      tamper-proof: it sits inside the Ed25519 signature, so it can be
- *      neither shortened nor forged on the customer's disk.
- *   2. The commercial vendor namespaces below. A module named `Focus_*` is
- *      commercial by default — and that rule lives in this class, part of the
- *      licensing module, not in a file shipped alongside the module it
- *      protects.
- *   3. `etc/focus_licensing.xml` declarations. Convenience only: they carry
- *      the merchant-facing label, and let a module outside the commercial
- *      namespaces opt in.
- *
- * WHY IT IS ORDERED THIS WAY: the declaration file used to be the only source.
- * Deleting it from a module dropped that module out of the guarded set, and it
- * then ran unlicensed — a silent bypass that left the module's own code
- * untouched and survived updates. Sources 1 and 2 close it: whether a module is
- * commercial no longer travels in a file the customer can delete.
- *
- * For the same reason `enabled="false"` in a declaration can no longer un-guard
- * a module covered by source 1 or 2. Opting out is a decision for the licence
- * server, never for a file on the customer's disk.
- */
 class ProtectedModuleRegistry implements ProtectedModuleRegistryInterface
 {
     /**
@@ -72,13 +46,6 @@ class ProtectedModuleRegistry implements ProtectedModuleRegistryInterface
     ) {}
 
     /**
-     * Every module currently treated as commercial: the signed list, plus local
-     * declarations, minus the licensing modules themselves.
-     *
-     * Namespace membership alone cannot be enumerated here — this class does not
-     * know what is installed — so callers that need the full set combine this
-     * with module discovery. isGuarded() is the authority for a single module.
-     *
      * @return string[]
      */
     public function getGuardedModules(): array
@@ -112,17 +79,14 @@ class ProtectedModuleRegistry implements ProtectedModuleRegistryInterface
             return false;
         }
 
-        // 1. Signed server list — authoritative, cannot be edited locally.
         if (isset($this->loadSignedProtected()[$moduleName])) {
             return true;
         }
 
-        // 2. Commercial namespace — the rule lives here, not in the module.
         if ($this->isCommercialNamespace($moduleName)) {
             return true;
         }
 
-        // 3. Local opt-in, for modules outside the commercial namespaces.
         $declaration = $this->loadDeclarations()[$moduleName] ?? null;
 
         return $declaration !== null && ($declaration['enabled'] ?? true) === true;
@@ -155,11 +119,8 @@ class ProtectedModuleRegistry implements ProtectedModuleRegistryInterface
     }
 
     /**
-     * The signed `protected_modules` list from the cached licence payload.
-     *
-     * Read through LicenseCacheManager, which verifies the Ed25519 signature on
-     * every read: a tampered payload yields null here AND is rejected as a
-     * licence at the same time, so editing it frees nothing.
+     * The signed `protected_modules` list — a tampered payload fails
+     * signature verification and yields null here, so editing it frees nothing.
      *
      * @return array<string, true>
      */

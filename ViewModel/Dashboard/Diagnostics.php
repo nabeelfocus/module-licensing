@@ -12,11 +12,6 @@ namespace Focus\Licensing\ViewModel\Dashboard;
 use Focus\Licensing\Model\Config;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-/**
- * Diagnostics card data, grouped Connection / License / Cache.
- * Static values only — live probe results come from the Test Connection
- * button (ConnectionTester) and render client-side.
- */
 class Diagnostics implements ArgumentInterface
 {
     /**

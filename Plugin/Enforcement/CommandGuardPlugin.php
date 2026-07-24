@@ -16,11 +16,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * CLI guard — blocks bin/magento commands that belong to a guarded, unlicensed
- * module with a clear message and a non-zero exit code. Core and third-party
- * commands are never touched (fast namespace check first).
- */
 class CommandGuardPlugin
 {
     /**

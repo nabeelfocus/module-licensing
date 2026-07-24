@@ -11,19 +11,6 @@ namespace Focus\Licensing\Api;
 
 use Focus\Licensing\Model\ActivityLog;
 
-/**
- * The ONE question every commercial Focus module asks.
- *
- * Usage in a commercial module:
- *   if (!$this->guard->isLicensed('Focus_KSystem')) {
- *       return;
- *   }
- *
- * The guard is:
- *   - In-memory cached per-request (first call hits StateStore, subsequent calls are free)
- *   - Zero network I/O in web requests — all validation happens in the cron
- *   - Non-throwing — if the license state is unknown/corrupt the guard returns false
- */
 interface LicenseGuardInterface
 {
     /**
@@ -43,11 +30,8 @@ interface LicenseGuardInterface
      * Optionally accepts a license key to use instead of the configured one (used during "Save and Verify" actions).
      *
      * @param string|null $licenseKey
-     * @param string|null $source Why the check ran, for the activity history —
-     *                       one of Focus\Licensing\Model\ActivityLog::SOURCE_*.
-     *                       Pass null for a silent refresh that records nothing,
-     *                       used when the caller has already written a more
-     *                       meaningful entry of its own.
+     * @param string|null $source One of ActivityLog::SOURCE_*, or null for a
+     *                       silent refresh that records nothing
      * @return bool
      */
     public function forceRevalidate(

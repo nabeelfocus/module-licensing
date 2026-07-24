@@ -17,19 +17,6 @@ use Focus\Licensing\Model\Config;
 use Focus\Licensing\Model\LicenseCacheManager;
 use Focus\Licensing\Logger\Logger;
 
-/**
- * The guard: answers isLicensed() for every commercial module.
- *
- * Decision flow (per-request memory cache → global StateStore → offline grace rules):
- *
- *   1. Per-request in-memory cache
- *   2. LicenseCacheManager::read() (global state)
- *      - signature valid & module in allowed_modules & state age < TTL   → ALLOW
- *      - signature valid & module not in allowed_modules                  → DENY
- *      - state age >= TTL but < offline grace                             → ALLOW (stale-graced)
- *      - beyond offline grace / corrupt / absent                          → DENY
- *   3. forceRevalidate() → calls server now, refreshes cache for ALL modules
- */
 class LicenseGuard implements LicenseGuardInterface
 {
     /** Per-request memory cache: module_name → bool */
@@ -165,18 +152,7 @@ class LicenseGuard implements LicenseGuardInterface
 
     /**
      * One line describing what this check changed, for the activity history.
-     *
-     * Module names are reported rather than counts: "Divan Storage Add-ons
-     * added" tells an admin something a revision number never could.
-     *
-     * A licence's allowed_modules can gain or lose a module the store has
-     * never installed — a licence legitimately covers whatever the customer
-     * bought, whether or not they've installed it yet. That's real and
-     * correct on the SERVER side, but on THIS store's own activity history it
-     * is noise: telling an admin "Focus_PdpBestSellers added" when they don't
-     * even run that module answers a question they didn't ask. Added/removed
-     * are filtered to modules actually installed here, so this history only
-     * ever reports something the admin can see the effect of.
+     * Added/removed are limited to modules actually installed here.
      *
      * @param array|null $previous
      * @param array $response

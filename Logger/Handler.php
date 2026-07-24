@@ -12,9 +12,6 @@ namespace Focus\Licensing\Logger;
 use Magento\Framework\Logger\Handler\Base;
 use Monolog\Logger;
 
-/**
- * Writes the Focus_Licensing channel to var/log/focus_licensing.log.
- */
 class Handler extends Base
 {
     /**

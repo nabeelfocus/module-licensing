@@ -12,10 +12,6 @@ namespace Focus\Licensing\Config;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Config\SchemaLocatorInterface;
 
-/**
- * Points the focus_licensing.xml reader at its XSD for per-file and merged
- * validation.
- */
 class SchemaLocator implements SchemaLocatorInterface
 {
     private string $schema;

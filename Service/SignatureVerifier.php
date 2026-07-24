@@ -12,20 +12,6 @@ namespace Focus\Licensing\Service;
 use Focus\Licensing\Model\ServerKeyring;
 use Focus\Licensing\Logger\Logger;
 
-/**
- * Verifies the Ed25519 signature on every license server response before it
- * is trusted or persisted. This is the client half of the anti-tamper /
- * anti-spoof design:
- *
- *   - A fake license server (hosts/DNS redirect) cannot produce a valid
- *     signature, so its "success:true" responses are rejected.
- *   - Editing the cached state in the local database breaks the signature,
- *     so tampering downgrades to "no state" (module restricted).
- *
- * CONTRACT: SIGNED_FIELDS and the canonicalization below mirror the server's
- * Focus\LicenseServer\Service\SignaturePayload exactly. The classes are
- * duplicated (not shared) because client and server ship to different stores.
- */
 class SignatureVerifier
 {
     private const SIGNED_FIELDS = [

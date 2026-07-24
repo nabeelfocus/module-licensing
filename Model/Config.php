@@ -14,9 +14,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Reads Focus_Licensing configuration from core_config_data.
- */
 class Config
 {
     public const XML_PATH_SERVER_URL    = 'focus_licensing/general/server_url';
