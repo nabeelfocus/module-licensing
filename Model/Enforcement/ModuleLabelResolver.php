@@ -90,8 +90,6 @@ class ModuleLabelResolver
             return $moduleName;
         }
 
-        // Split on lower→upper boundaries and before an acronym run that is
-        // followed by a normal word ("KSystemSync" → K | System | Sync).
         $spaced = (string) preg_replace(
             ['/([a-z0-9])([A-Z])/', '/([A-Z]+)([A-Z][a-z])/'],
             ['$1 $2', '$1 $2'],

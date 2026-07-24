@@ -52,7 +52,6 @@ class Domains implements ArgumentInterface
             ];
         }
 
-        // Older cached payloads have no domains list — show at least this store
         if (empty($rows) && $current !== '') {
             $rows[] = [
                 'domain'            => $current,

@@ -29,7 +29,6 @@ class OfflineGraceEnding extends AbstractLicenseMessage
             return false;
         }
 
-        // Only relevant once the cache is well past its normal refresh window
         return $this->licenseState->getCacheAgeSeconds() > 2 * 86400
             && $this->licenseState->getGraceRemainingDays() <= self::WARN_AT_DAYS_LEFT;
     }

@@ -115,7 +115,6 @@ class ActivityLog
         try {
             $this->flagManager->deleteFlag(self::FLAG_CODE);
         } catch (\Exception) {
-            // nothing to do — an unreadable history is not worth an error
         }
     }
 }

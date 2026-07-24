@@ -40,7 +40,6 @@ class AdminMenuGuardPlugin
                 $menu->remove($id);
             }
         } catch (\Throwable $e) {
-            // Fail open: never hide/break the admin menu because of an internal error.
             $this->logger->error('Focus_Licensing: admin menu guard failed (fail-open)', [
                 'exception' => $e->getMessage(),
             ]);
@@ -64,7 +63,6 @@ class AdminMenuGuardPlugin
                 && str_starts_with($module, 'Focus_')
                 && $this->enforcementGuard->isModuleBlocked($module)
             ) {
-                // Removing the parent removes its whole subtree — no need to recurse.
                 $blockedIds[] = $id;
                 continue;
             }

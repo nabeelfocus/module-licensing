@@ -82,7 +82,6 @@ class EnforcementGuard
 
             return $moduleName;
         } catch (\Throwable $e) {
-            // Fail OPEN: an internal fault must never take the store down.
             $this->logger->error('Focus_Licensing: enforcement evaluation failed (fail-open)', [
                 'class'     => $className,
                 'exception' => $e->getMessage(),

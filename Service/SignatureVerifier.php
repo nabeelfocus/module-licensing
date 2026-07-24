@@ -81,8 +81,6 @@ class SignatureVerifier
         $canonical = [];
         foreach (self::SIGNED_FIELDS as $field) {
             $value = $payload[$field] ?? null;
-            // json response decodes integers/bools natively; normalize the
-            // fields whose PHP type could drift from the server's setters
             if ($field === 'success') {
                 $value = (bool) $value;
             } elseif ($field === 'check_again_in' || $field === 'license_revision') {
@@ -93,10 +91,6 @@ class SignatureVerifier
             $canonical[$field] = $value;
         }
 
-        // Mirrors SignaturePayload: appended only when non-empty, so a payload
-        // signed by a server that predates this field still verifies. Removing
-        // the list from a stored payload therefore does not go unnoticed — the
-        // canonical string changes and the whole cache is rejected.
         $protectedModules = array_map('strval', array_values((array) ($payload['protected_modules'] ?? [])));
         if ($protectedModules !== []) {
             $canonical['protected_modules'] = $protectedModules;
