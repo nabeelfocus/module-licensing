@@ -141,7 +141,6 @@ class ProtectedModuleRegistry implements ProtectedModuleRegistryInterface
                 }
             }
         } catch (\Exception) {
-            // Fail soft: namespace and declarations still apply.
             $signed = [];
         }
 

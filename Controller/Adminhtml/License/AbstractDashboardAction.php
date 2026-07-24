@@ -56,7 +56,6 @@ abstract class AbstractDashboardAction extends Action implements HttpPostActionI
                 ->createBlock(View::class, 'focus_licensing_dashboard')
                 ->toHtml();
         } catch (\Exception) {
-            // Without fresh HTML the JS falls back to showing just the message
             $result['html'] = null;
         }
 

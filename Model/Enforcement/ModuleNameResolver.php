@@ -40,7 +40,6 @@ class ModuleNameResolver
     {
         $fqcn = ltrim($className, '\\');
 
-        // Fast path: not a Focus class → not our concern
         if (!str_starts_with($fqcn, self::VENDOR . '\\')) {
             return null;
         }

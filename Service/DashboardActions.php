@@ -74,8 +74,6 @@ class DashboardActions
             return ['success' => false, 'message' => (string) __('No license key is configured. Enter it below and click Save Config first.')];
         }
 
-        // Dropping the cache forces the guard down the activate() bootstrap
-        // path, which returns the complete signed payload + a fresh secret.
         $this->cacheManager->clear();
         $isValid = $this->guard->forceRevalidate(null, ActivityLog::SOURCE_MANUAL);
 
@@ -167,9 +165,6 @@ class DashboardActions
             (string) __('Released domain %1', $domain)
         );
 
-        // Refresh so the domains card reflects the freed slot immediately.
-        // Silent: the release above is already the meaningful history entry,
-        // and this refresh would otherwise add a redundant "No change." row.
         $this->guard->forceRevalidate(null, null);
 
         return ['success' => true, 'message' => (string) __('%1 has been released. Its production slot is now free.', $domain)];

@@ -29,16 +29,10 @@ class BlockGuardPlugin
      */
     public function aroundToHtml(AbstractBlock $subject, callable $proceed): string
     {
-        // 1. The block class itself belongs to a guarded, unlicensed module.
         if ($this->enforcementGuard->getBlockedModuleForClass($subject::class) !== null) {
             return '';
         }
 
-        // 2. A CORE block class rendering a commercial module's template — the
-        //    common "add my feature to the PDP" pattern:
-        //      <block class="Magento\Catalog\Block\Product\View"
-        //             template="Focus_MattressAddon::mattressaddon.phtml">
-        //    The class is Magento's, so only the template reveals the owner.
         if ($subject instanceof Template) {
             $template = (string) $subject->getTemplate();
             if ($template !== '' && str_starts_with($template, 'Focus_')) {

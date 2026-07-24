@@ -61,9 +61,6 @@ class LicenseClient implements LicenseClientInterface
      */
     public function validate(string $licenseKey, array $installedModules): ?array
     {
-        // Report the revision we hold so the server can log which stores are
-        // stale; the response always carries the full signed state, and the
-        // cache refresh happens unconditionally in the guard.
         $state = $this->cacheManager->read();
 
         return $this->post('/V1/focus-license/validate', [
@@ -107,9 +104,6 @@ class LicenseClient implements LicenseClientInterface
             return $report;
         }
 
-        // 1. Base reachability — any HTTP answer counts, we only measure transport.
-        // Some storefront home pages are slower than our client timeout, so a
-        // successful API round-trip below also proves reachability.
         try {
             $curl = $this->curlFactory->create();
             $curl->setOption(CURLOPT_CONNECTTIMEOUT, self::CONNECT_TIMEOUT);
@@ -122,7 +116,6 @@ class LicenseClient implements LicenseClientInterface
             $this->logger->info('Focus_Licensing: test connection — server unreachable', ['exception' => $e->getMessage()]);
         }
 
-        // 2. Signed validate round-trip flagged as a test (read-only server-side)
         $state = $this->cacheManager->read();
         $body = [
             'licenseKey'      => $licenseKey,
@@ -156,7 +149,6 @@ class LicenseClient implements LicenseClientInterface
             $this->logger->info('Focus_Licensing: test connection — API call failed', ['exception' => $e->getMessage()]);
         }
 
-        // An answering API is proof of reachability even if the base probe timed out
         if (!$report['server_reachable'] && ($report['api_status'] ?? 0) > 0) {
             $report['server_reachable'] = true;
             $report['server_ms'] = $report['api_ms'];
@@ -182,7 +174,6 @@ class LicenseClient implements LicenseClientInterface
         $json = json_encode($body, JSON_THROW_ON_ERROR);
 
         try {
-            // Fresh client per request so headers never leak between calls
             $curl = $this->curlFactory->create();
             $curl->setOption(CURLOPT_CONNECTTIMEOUT, self::CONNECT_TIMEOUT);
             $curl->setOption(CURLOPT_TIMEOUT, self::TOTAL_TIMEOUT);

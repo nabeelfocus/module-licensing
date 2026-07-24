@@ -77,7 +77,6 @@ class CommercialModulesProvider extends AbstractDataProvider
      */
     public function addFilter(Filter $filter)
     {
-        // no-op: in-memory data set, no server-side filtering
     }
 
     /**
@@ -86,7 +85,6 @@ class CommercialModulesProvider extends AbstractDataProvider
      */
     public function addOrder($field, $direction)
     {
-        // no-op: rows are pre-sorted by module name
     }
 
     /**
@@ -95,6 +93,5 @@ class CommercialModulesProvider extends AbstractDataProvider
      */
     public function setLimit($offset, $size)
     {
-        // no-op: the full set is always small enough to return
     }
 }

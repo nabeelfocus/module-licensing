@@ -44,7 +44,6 @@ class ObserverGuardPlugin
             return $proceed($configuration, $observer);
         }
 
-        // Unlicensed → skip the observer entirely.
         $this->logger->info('Focus_Licensing: skipped observer of unlicensed module', [
             'module'   => $blockedModule,
             'observer' => $observerClass,
