@@ -34,12 +34,6 @@
                 type="Focus\Licensing\Plugin\Enforcement\BlockGuardPlugin"
                 sortOrder="10"/>
     </type>
-    <type name="Magento\Shipping\Model\Carrier\AbstractCarrierInterface">
-        <plugin name="focus_licensing_carrier_guard"
-                type="Focus\Licensing\Plugin\Enforcement\CarrierGuardPlugin"
-                sortOrder="10"/>
-    </type>
-
     <type name="Focus\Licensing\Logger\Handler">
         <arguments>
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>

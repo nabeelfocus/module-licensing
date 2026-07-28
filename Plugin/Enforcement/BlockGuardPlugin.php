@@ -15,22 +15,15 @@ use Magento\Framework\View\Element\Template;
 
 class BlockGuardPlugin
 {
-    /** Core-block <preference> overrides — must keep rendering the page even when unlicensed. */
-    private const CORE_OVERRIDE_EXEMPT = [
-        'Focus\\ProductSearch\\Block\\CustomResult',
-        'Focus\\ProductSearch\\Block\\Product\\CustomListing',
-    ];
-
-    /** Templates re-pointed onto a core block class, for the same reason as CORE_OVERRIDE_EXEMPT. */
-    private const CORE_TEMPLATE_EXEMPT = [
-        'Focus_ProductNameOnCategoryPage::productname.phtml',
-    ];
-
     /**
      * @param EnforcementGuard $enforcementGuard
+     * @param string[] $coreOverrideExempt Block classes standing in for a core Magento block via <preference> — populated per-project, never here.
+     * @param string[] $coreTemplateExempt Templates re-pointed onto a core block class, for the same reason.
      */
     public function __construct(
-        private readonly EnforcementGuard $enforcementGuard
+        private readonly EnforcementGuard $enforcementGuard,
+        private readonly array $coreOverrideExempt = [],
+        private readonly array $coreTemplateExempt = []
     ) {}
 
     /**
@@ -40,7 +33,7 @@ class BlockGuardPlugin
      */
     public function aroundToHtml(AbstractBlock $subject, callable $proceed): string
     {
-        if (in_array($subject::class, self::CORE_OVERRIDE_EXEMPT, true)) {
+        if (in_array($subject::class, $this->coreOverrideExempt, true)) {
             return (string) $proceed();
         }
 
@@ -52,7 +45,7 @@ class BlockGuardPlugin
             $template = (string) $subject->getTemplate();
             if ($template !== ''
                 && str_starts_with($template, 'Focus_')
-                && !in_array($template, self::CORE_TEMPLATE_EXEMPT, true)
+                && !in_array($template, $this->coreTemplateExempt, true)
             ) {
                 $module = strtok($template, ':');
                 if (is_string($module) && $this->enforcementGuard->isModuleBlocked($module)) {
