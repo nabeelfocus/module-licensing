@@ -2,13 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <!--
-            ONE shared "focus" tab for every Focus module. This is a
-            re-declaration of the same tab id the other Focus modules use, so
-            Magento merges them into a single entry instead of showing two
-            identically-labelled "Focus" tabs. class="focus-tab" adds the Focus
-            logo before the label (styled in focus-dashboard.css).
-        -->
+        <!-- Re-declares the same tab id every Focus module uses so Magento merges them into one "Focus" tab. -->
         <tab id="focus" translate="label" sortOrder="400" class="focus-tab">
             <label>Focus</label>
         </tab>
@@ -18,16 +12,11 @@
             <tab>focus</tab>
             <resource>Focus_Licensing::config</resource>
 
-            <!--
-                Field-less group rendered entirely by its frontend_model:
-                the licensing dashboard (status, modules, domains, actions).
-            -->
             <group id="dashboard" translate="label" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>License Dashboard</label>
                 <frontend_model>Focus\Licensing\Block\Adminhtml\System\Config\Dashboard</frontend_model>
             </group>
 
-            <!-- General settings -->
             <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>General</label>
 
@@ -49,11 +38,7 @@
                 </field>
             </group>
 
-            <!--
-                Where the dashboard's "Renew License" and "Contact Support"
-                buttons point. Each button only appears once its destination is
-                set, so an unconfigured store never shows a dead link.
-            -->
+            <!-- Each button only appears once its destination is set, so an unconfigured store never shows a dead link. -->
             <group id="support" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Renewal &amp; Support</label>
 

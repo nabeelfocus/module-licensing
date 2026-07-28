@@ -11,7 +11,6 @@ namespace Focus\Licensing\Model\Enforcement;
 
 use Focus\Licensing\Api\ProtectedModuleRegistryInterface;
 use Focus\Licensing\Model\LicenseCacheManager;
-use Magento\Framework\Config\DataInterface;
 
 class ProtectedModuleRegistry implements ProtectedModuleRegistryInterface
 {
@@ -30,18 +29,13 @@ class ProtectedModuleRegistry implements ProtectedModuleRegistryInterface
         'Focus_LicenseServer',
     ];
 
-    /** @var array<string, array{name: string, label: string, enabled: bool}>|null */
-    private ?array $declarations = null;
-
     /** @var array<string, true>|null */
     private ?array $signedProtected = null;
 
     /**
-     * @param DataInterface $config
      * @param LicenseCacheManager $cacheManager
      */
     public function __construct(
-        private readonly DataInterface $config,
         private readonly LicenseCacheManager $cacheManager
     ) {}
 
@@ -50,18 +44,11 @@ class ProtectedModuleRegistry implements ProtectedModuleRegistryInterface
      */
     public function getGuardedModules(): array
     {
-        $modules = array_keys($this->loadSignedProtected());
-
-        foreach ($this->loadDeclarations() as $name => $entry) {
-            if (($entry['enabled'] ?? true) === true || $this->isCommercialNamespace($name)) {
-                $modules[] = $name;
-            }
-        }
-
-        $modules = array_values(array_unique(array_filter(
-            $modules,
+        $modules = array_values(array_filter(
+            array_keys($this->loadSignedProtected()),
             static fn (string $name): bool => !in_array($name, self::NEVER_GUARDED, true)
-        )));
+        ));
+
         sort($modules);
 
         return $modules;
@@ -83,13 +70,7 @@ class ProtectedModuleRegistry implements ProtectedModuleRegistryInterface
             return true;
         }
 
-        if ($this->isCommercialNamespace($moduleName)) {
-            return true;
-        }
-
-        $declaration = $this->loadDeclarations()[$moduleName] ?? null;
-
-        return $declaration !== null && ($declaration['enabled'] ?? true) === true;
+        return $this->isCommercialNamespace($moduleName);
     }
 
     /**
@@ -100,7 +81,7 @@ class ProtectedModuleRegistry implements ProtectedModuleRegistryInterface
      */
     public function getLabel(string $moduleName): string
     {
-        return $this->loadDeclarations()[$moduleName]['label'] ?? $moduleName;
+        return $moduleName;
     }
 
     /**
@@ -145,17 +126,5 @@ class ProtectedModuleRegistry implements ProtectedModuleRegistryInterface
         }
 
         return $this->signedProtected = $signed;
-    }
-
-    /**
-     * @return array<string, array{name: string, label: string, enabled: bool}>
-     */
-    private function loadDeclarations(): array
-    {
-        if ($this->declarations === null) {
-            $this->declarations = $this->config->get() ?: [];
-        }
-
-        return $this->declarations;
     }
 }

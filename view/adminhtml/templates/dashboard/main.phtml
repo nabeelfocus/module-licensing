@@ -8,8 +8,6 @@
 $state = $block->getLicenseState();
 $hasState = $state->getState() !== null;
 
-// Before the store has a verified license there is nothing to report on, so the
-// dashboard becomes a setup guide instead of a wall of restricted modules.
 $isFirstRun = !$hasState;
 ?>
 <div id="focus-lic-dashboard"

@@ -2,10 +2,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <!--
-        REST enforcement guard — only loaded on the webapi_rest area.
-        Blocks REST endpoints owned by guarded, unlicensed modules with a 403.
-    -->
     <type name="Magento\Webapi\Controller\Rest\Router">
         <plugin name="focus_licensing_webapi_guard"
                 type="Focus\Licensing\Plugin\Enforcement\WebapiRouterGuardPlugin"

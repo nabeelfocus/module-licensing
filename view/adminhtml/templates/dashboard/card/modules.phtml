@@ -1,12 +1,5 @@
 <?php
 /**
- * Commercial Modules card — filterable and searchable.
- *
- * Every installed commercial module is rendered once; the filter chips and the
- * search box hide and show rows client-side (the list is small and fixed, so a
- * round trip would only add latency). "Needs attention" is the default view:
- * modules that are running but not covered by the license.
- *
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Framework\Escaper $escaper
  */
@@ -18,8 +11,6 @@ $state = $block->getData('license_state');
 $rows = $modules->getRows();
 $counts = $modules->getFilterCounts();
 
-// With no verified license every module would render as restricted, which reads
-// as breakage rather than as setup still pending. Collapse to a single line.
 $awaitingActivation = $state->getState() === null;
 
 $chips = [

@@ -1,10 +1,5 @@
 <?php
 /**
- * License status strip — answers "is my license healthy?" on one line.
- *
- * Status, plan and expiry read together across a single row; the remaining
- * facts sit in a compact strip below so the modules card starts above the fold.
- *
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Framework\Escaper $escaper
  */
@@ -34,8 +29,6 @@ $hasState = $state->getState() !== null;
             <p class="focus-lic__hero-desc"><?= $escaper->escapeHtml($state->getStatusDescription()) ?></p>
 
             <?php
-            // Renewal and support are only offered where they are the answer,
-            // and only once a destination has been configured — never a dead link.
             $needsHelp = in_array($state->getStatus(), [
                 \Focus\Licensing\ViewModel\Dashboard\LicenseState::STATUS_EXPIRING,
                 \Focus\Licensing\ViewModel\Dashboard\LicenseState::STATUS_EXPIRED,
