@@ -1,12 +1,5 @@
 <?php
 /**
- * Getting Started card — shown only before the store has a working license.
- *
- * A fresh install has no key and therefore no allowed modules, which would
- * otherwise render as a full table of restricted rows: a screen that reads as
- * a fault rather than as work not yet started. This card replaces that with
- * the three steps to a working license, and marks where the admin currently is.
- *
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Framework\Escaper $escaper
  */
@@ -18,7 +11,6 @@ $modules = $block->getData('module_status');
 $hasKey = $state->isKeyConfigured();
 $installed = $modules->getInstalledCount();
 
-// Step 2 is current until a key exists; then step 3 is where the store is.
 $steps = [
     [
         'state' => 'done',
